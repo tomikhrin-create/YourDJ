@@ -7,9 +7,10 @@
   <meta name="description" content="Svatební DJ pro Moravu & Slezsko. Profesionální zvuk, playlist na míru, rychlá domluva. Cena na vyžádání. Rezervujte termín — nezávazná konzultace zdarma."/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Optional: hide native scrollbar in the logos carousel (still scrollable/drag) */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+    .glow-hover:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(251,191,36,.25),0 0 24px rgba(245,158,11,.55)}
+    .glow-hover{transition:transform .2s ease,box-shadow .2s ease}
+    img[loading="lazy"]{content-visibility:auto}
   </style>
 </head>
 <body class="min-h-screen bg-black text-white">
@@ -22,9 +23,10 @@
         <a href="#ukazky" class="text-sm font-medium hover:text-amber-600">Ukázky</a>
         <a href="#garance" class="text-sm font-medium hover:text-amber-600">Garance</a>
         <a href="#balicky" class="text-sm font-medium hover:text-amber-600">Balíčky</a>
+        <a href="#recenze" class="text-sm font-medium hover:text-amber-600">Recenze</a>
         <a href="#faq" class="text-sm font-medium hover:text-amber-600">FAQ</a>
       </nav>
-      <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
+      <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
     </div>
   </header>
 
@@ -46,7 +48,10 @@
       </h1>
       <div class="mt-8">
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-3">
-          <div class="aspect-video w-full overflow-hidden rounded-xl bg-white/5 flex items-center justify-center text-white/40">Vložit velké video (0:30–1:00)</div>
+          <!-- Replace src with your /public/assets/hero.mp4 and poster with hero.jpg -->
+          <video class="w-full aspect-video rounded-xl" controls preload="none" poster="/assets/hero-poster.jpg">
+            <source src="/assets/hero.mp4" type="video/mp4"/>
+          </video>
         </div>
       </div>
       <ul class="mt-8 flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-6 gap-y-2 text-white/80">
@@ -56,7 +61,7 @@
         <li class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Rychlá domluva</span></li>
       </ul>
       <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-        <a href="#kontakt" class="cta inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci rezervovat termín</a>
+        <a href="#kontakt" class="cta inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci rezervovat termín</a>
         <a href="#ukazky" class="rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:border-white/40">Mrknout na ukázky</a>
       </div>
     </div>
@@ -79,36 +84,36 @@
       <h3 class="text-center text-sm font-semibold tracking-wide text-white/60">Spolupracoval jsem / hrál jsem pro</h3>
       <div class="mt-6 overflow-hidden no-scrollbar" id="logoCarousel">
         <div class="flex gap-6 py-2 select-none" id="logoTrack">
-          <!-- 10 placeholder logo tiles -->
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 1</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 2</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 3</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 4</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 5</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 6</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 7</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 8</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 9</span></div>
-          <div class="flex h-12 w-40 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 grayscale"><span class="text-xs text-white/50">Logo 10</span></div>
+          <!-- Replace src attributes with your logos in /public/assets/logos/ -->
+          <img loading="lazy" src="/assets/logos/logo-1.svg" alt="Logo 1" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-2.svg" alt="Logo 2" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-3.svg" alt="Logo 3" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-4.svg" alt="Logo 4" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-5.svg" alt="Logo 5" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-6.svg" alt="Logo 6" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-7.svg" alt="Logo 7" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-8.svg" alt="Logo 8" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-9.svg" alt="Logo 9" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
+          <img loading="lazy" src="/assets/logos/logo-10.svg" alt="Logo 10" class="h-12 w-40 object-contain rounded-xl border border-white/10 bg-white/5 p-3 grayscale shrink-0"/>
         </div>
       </div>
       <p class="mt-2 text-center text-xs text-white/50">(Swipe/drag →)</p>
     </div>
   </section>
 
-  <!-- SHOWCASE (fade/slide items) -->
+  <!-- SHOWCASE (fade/slide images) -->
   <section id="ukazky" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold">Ukázky atmosféry</h2>
       <p class="mt-2 text-white/70">První tanec, večerní párty, multi‑žánrový set pro mladé i rodiče.</p>
       <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <!-- 6 tiles with reveal animation -->
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 1</div></div>
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 2</div></div>
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 3</div></div>
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 4</div></div>
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 5</div></div>
-        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10 opacity-0 translate-y-5 transition duration-500" data-reveal><div class="w-full h-full flex items-center justify-center text-sm text-white/40">foto/video 6</div></div>
+        <!-- Replace src with your /public/assets/gallery/* -->
+        <img loading="lazy" data-reveal src="/assets/gallery/1.webp" alt="Ukázka 1" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
+        <img loading="lazy" data-reveal src="/assets/gallery/2.webp" alt="Ukázka 2" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
+        <img loading="lazy" data-reveal src="/assets/gallery/3.webp" alt="Ukázka 3" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
+        <img loading="lazy" data-reveal src="/assets/gallery/4.webp" alt="Ukázka 4" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
+        <img loading="lazy" data-reveal src="/assets/gallery/5.webp" alt="Ukázka 5" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
+        <img loading="lazy" data-reveal src="/assets/gallery/6.webp" alt="Ukázka 6" class="aspect-[4/3] w-full rounded-2xl bg-white/10 object-cover opacity-0 translate-y-5 transition duration-500"/>
       </div>
     </div>
   </section>
@@ -119,7 +124,7 @@
       <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-8 text-center">
         <h3 class="text-2xl font-extrabold">Garance spokojenosti</h3>
         <p class="mx-auto mt-3 max-w-2xl text-white/70">Věřím své práci. Pokud se hosté nezvednou k tanci, zůstanu o hodinu déle zdarma. Společně předem nastavíme styl večera, aby si ho užili mladí, rodiče i prarodiče.</p>
-        <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-5 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci mít jistotu</a>
+        <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-5 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci mít jistotu</a>
       </div>
     </div>
   </section>
@@ -130,58 +135,74 @@
       <h2 class="text-3xl font-bold">Balíčky — cena na vyžádání</h2>
       <p class="mt-2 text-white/70">Vyberte si rozsah služeb a napište mi o přesnou nabídku dle místa, času a techniky.</p>
       <div class="mt-8 grid gap-6 lg:grid-cols-3">
-        <!-- Classic -->
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
-          <div class="flex items-baseline justify-between">
-            <h3 class="text-xl font-bold">Classic</h3>
-            <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
-          </div>
+          <div class="flex items-baseline justify-between"><h3 class="text-xl font-bold">Classic</h3><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>DJ set do 8 hodin</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Profesionální ozvučení</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Základní světla</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Konzultace a mini‑scénář</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 8 hodin</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Profesionální ozvučení</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Základní světla</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Konzultace a mini‑scénář</li>
           </ul>
-          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
+          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
         </div>
-        <!-- Premium (highlight) -->
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 ring-2 ring-amber-500">
-          <div class="flex items-baseline justify-between">
-            <div class="flex items-center gap-2">
-              <h3 class="text-xl font-bold">Premium</h3>
-              <span class="rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-2 py-1 text-xs font-extrabold text-black">Nejoblíbenější</span>
-            </div>
-            <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
-          </div>
+          <div class="flex items-baseline justify-between"><div class="flex items-center gap-2"><h3 class="text-xl font-bold">Premium</h3><span class="rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-2 py-1 text-xs font-extrabold text-black">Nejoblíbenější</span></div><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>DJ set do 12 hodin</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Koordinace programu</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Mlha (efekt)</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Rozšířená světelná show</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Moderace klíčových momentů</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 12 hodin</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Koordinace programu</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Mlha (efekt)</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Rozšířená světelná show</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Moderace klíčových momentů</li>
           </ul>
-          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
+          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
         </div>
-        <!-- Deluxe -->
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
-          <div class="flex items-baseline justify-between">
-            <h3 class="text-xl font-bold">Deluxe</h3>
-            <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
-          </div>
+          <div class="flex items-baseline justify-between"><h3 class="text-xl font-bold">Deluxe</h3><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>DJ set dle domluvy (nad 12 h)</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Komplexní koordinace + celovečerní moderace</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Full light show + speciální efekty</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>Rezervní technika a technická podpora</li>
-            <li class="flex gap-2"><span class="text-amber-400">✓</span>After‑party mix pro vás</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set dle domluvy (nad 12 h)</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Komplexní koordinace + celovečerní moderace</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Full light show + speciální efekty</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Rezervní technika a technická podpora</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>After‑party mix pro vás</li>
           </ul>
-          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
+          <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- VALUE / BENEFITS -->
+  <!-- REVIEWS -->
+  <section id="recenze" class="py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold">Recenze novomanželů</h2>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        <!-- Replace avatars & names -->
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div class="flex items-center gap-3">
+            <img loading="lazy" src="/assets/avatars/1.webp" alt="Recenze 1" class="h-10 w-10 rounded-full object-cover"/>
+            <figcaption class="font-semibold">Katka & Martin</figcaption>
+          </div>
+          <blockquote class="mt-3 text-white/80 text-sm leading-relaxed">Parket byl plný celý večer. Skvělý výběr hudby pro všechny věkové skupiny a profesionální moderace.</blockquote>
+        </figure>
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div class="flex items-center gap-3">
+            <img loading="lazy" src="/assets/avatars/2.webp" alt="Recenze 2" class="h-10 w-10 rounded-full object-cover"/>
+            <figcaption class="font-semibold">Tereza & Pavel</figcaption>
+          </div>
+          <blockquote class="mt-3 text-white/80 text-sm leading-relaxed">Skvělá domluva, playlist na míru. Perfektní atmosféra od prvního tance až do rána.</blockquote>
+        </figure>
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div class="flex items-center gap-3">
+            <img loading="lazy" src="/assets/avatars/3.webp" alt="Recenze 3" class="h-10 w-10 rounded-full object-cover"/>
+            <figcaption class="font-semibold">Lucie & Honza</figcaption>
+          </div>
+          <blockquote class="mt-3 text-white/80 text-sm leading-relaxed">Profesionální přístup, skvělý zvuk a super hry. Doporučujeme všemi deseti!</blockquote>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE / BENEFITS + BONUSY -->
   <section class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 grid gap-10 lg:grid-cols-2">
       <div>
@@ -208,7 +229,7 @@
           <li class="flex gap-2"><span class="text-amber-400">✓</span>PDF: 50 tipů na svatební hity (pro první tanec, party, rodiče)</li>
           <li class="flex gap-2"><span class="text-amber-400">✓</span>After‑party playlist jako vzpomínka</li>
         </ul>
-        <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
+        <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
       </div>
     </div>
   </section>
@@ -232,64 +253,44 @@
               <li class="flex gap-2"><span class="text-amber-400">✓</span>Profesionální moderování po celý den</li>
             </ul>
           </div>
-          <form id="contactForm" class="space-y-4">
+          <form id="contactForm" class="space-y-4" autocomplete="on">
+            <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true"/>
             <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="name2">Jméno</label>
-                <input id="name2" name="name" required type="text" placeholder="Nevěsta / ženich" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-              </div>
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="email2">E‑mail</label>
-                <input id="email2" name="email" required type="email" placeholder="vas@email.cz" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-              </div>
+              <div><label class="mb-1 block text-sm font-medium" for="name2">Jméno</label><input id="name2" name="name" required type="text" placeholder="Nevěsta / ženich" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
+              <div><label class="mb-1 block text-sm font-medium" for="email2">E‑mail</label><input id="email2" name="email" required type="email" placeholder="vas@email.cz" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="date2">Datum akce</label>
-                <input id="date2" name="date" required type="date" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-              </div>
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="venue2">Místo</label>
-                <input id="venue2" name="venue" required type="text" placeholder="město / místo" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-              </div>
+              <div><label class="mb-1 block text-sm font-medium" for="date2">Datum akce</label><input id="date2" name="date" required type="date" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/></div>
+              <div><label class="mb-1 block text-sm font-medium" for="venue2">Místo</label><input id="venue2" name="venue" required type="text" placeholder="město / místo" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
                 <label class="mb-1 block text-sm font-medium" for="type">Typ akce</label>
                 <select id="type" name="type" required class="w-full appearance-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400">
                   <option value="">Vyberte…</option>
-                  <option value="svatebni-den">Svatební den</option>
-                  <option value="firemni-vecirek">Firemní večírek</option>
-                  <option value="narozeniny">Oslava narozenin</option>
-                  <option value="konference">Konference</option>
-                  <option value="verejna-akce">Veřejná akce</option>
+                  <option value="Svatební den">Svatební den</option>
+                  <option value="Firemní večírek">Firemní večírek</option>
+                  <option value="Oslava narozenin">Oslava narozenin</option>
+                  <option value="Konference">Konference</option>
+                  <option value="Veřejná akce">Veřejná akce</option>
                 </select>
               </div>
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="attendees">Předpokládaný počet lidí</label>
-                <input id="attendees" name="attendees" type="number" min="1" placeholder="např. 80" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-              </div>
+              <div><label class="mb-1 block text-sm font-medium" for="attendees">Předpokládaný počet lidí</label><input id="attendees" name="attendees" type="number" min="1" placeholder="např. 80" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="start_time">Čas začátek</label>
-                <input id="start_time" name="start_time" type="time" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
-              </div>
-              <div>
-                <label class="mb-1 block text-sm font-medium" for="end_time">Čas konec</label>
-                <input id="end_time" name="end_time" type="time" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
-              </div>
+              <div><label class="mb-1 block text-sm font-medium" for="start_time">Čas začátek</label><input id="start_time" name="start_time" type="time" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/></div>
+              <div><label class="mb-1 block text-sm font-medium" for="end_time">Čas konec</label><input id="end_time" name="end_time" type="time" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/></div>
             </div>
             <div>
               <label class="mb-1 block text-sm font-medium" for="source">Odkud jste se o mně dozvěděli</label>
               <select id="source" name="source" class="w-full appearance-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400">
                 <option value="">Vyberte…</option>
-                <option value="fb">Facebook</option>
-                <option value="ig">Instagram</option>
-                <option value="google">Google</option>
-                <option value="doporučení">Doporučení</option>
-                <option value="vystava">Výstava</option>
-                <option value="jinak">Jinak</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Google">Google</option>
+                <option value="Doporučení">Doporučení</option>
+                <option value="Výstava">Výstava</option>
+                <option value="Jinak">Jinak</option>
               </select>
             </div>
             <div>
@@ -297,8 +298,9 @@
               <textarea id="note2" name="note" rows="4" placeholder="Představa hudby, první tanec, speciální požadavky…" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"></textarea>
             </div>
             <div id="contactSuccess" class="hidden rounded-xl bg-emerald-900/40 p-3 text-sm text-emerald-300">Díky! Vaše poptávka byla odeslána. Ozvu se vám do 24 hodin.</div>
+            <div id="contactError" class="hidden rounded-xl bg-red-900/40 p-3 text-sm text-red-200">Něco se nepovedlo. Zkuste to prosím znovu nebo napište na tomikhrin@gmail.com.</div>
             <div class="flex items-center gap-3">
-              <button type="submit" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(251,191,36,0.25),0_0_24px_rgba(245,158,11,0.55)] active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Odeslat poptávku</button>
+              <button type="submit" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Odeslat poptávku</button>
               <span class="text-sm text-white/60">* Odpovím do 24 hodin</span>
             </div>
           </form>
@@ -315,73 +317,43 @@
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         <!-- FAQ items -->
         <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Kolik stojí svatební DJ na Moravě a ve Slezsku?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Kolik stojí svatební DJ na Moravě a ve Slezsku?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Cena je na vyžádání podle délky hraní, místa konání a techniky. Po odeslání formuláře obratem pošlu nabídku na míru.</div>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Jak vypadá playlist na svatbu a berete přání hostů?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Jak vypadá playlist na svatbu a berete přání hostů?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Playlist stavím na míru – od evergreenů pro rodiče po aktuální hity. Během večera beru rozumné requesty a hlídám flow, aby byl parket plný.</div>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Máte vlastní ozvučení a světla?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Máte vlastní ozvučení a světla?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Ano. Přivezu profesionální aparaturu a světelnou techniku včetně mikrofonu na proslovy. V případě potřeby mám záložní vybavení.</div>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Pomůžete s moderací a harmonogramem večera?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Pomůžete s moderací a harmonogramem večera?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Ano, pomáhám s načasováním prvního tance, krájení dortu, her a dalších momentů tak, aby energie večera gradovala.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Jak probíhá rezervace termínu a smlouva?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Jak probíhá rezervace termínu a smlouva?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Po vyplnění formuláře potvrdím dostupnost, probereme představu a pošlu smlouvu s jasnými podmínkami. Záloha obvykle 20–30 %.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Co když je váš termín obsazený?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Co když je váš termín obsazený?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Dám vědět ihned. Pokud už hraji jinde, doporučím ověřené kolegy z regionu. Případně nabídnu jiné dostupné datum.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Hrajete i na venkovních svatbách / na zahradě?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Hrajete i na venkovních svatbách / na zahradě?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Ano, pokud je k dispozici přívod elektřiny a suché kryté místo pro techniku. Přizpůsobím aparaturu prostoru i počtu hostů.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Jaké písně doporučujete na první tanec?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Jaké písně doporučujete na první tanec?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Pošlu vám kurátorovaný seznam 50 ověřených skladeb pro první tanec i rodiče. Rád poradím s výběrem podle stylu vaší svatby.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Dojezd a cestovné po Moravě a Slezsku</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Dojezd a cestovné po Moravě a Slezsku</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem.</div>
         </div>
-        <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false">
-            <span>Jak dlouho dopředu rezervovat svatebního DJ?</span>
-            <svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
-          </button>
+        <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Jak dlouho dopředu rezervovat svatebního DJ?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny.</div>
         </div>
       </div>
@@ -400,93 +372,47 @@
   </footer>
 
   <script>
-    (function LandingCM_Static(){
-      // Year in footer
-      document.getElementById('year').textContent = new Date().getFullYear();
+  (()=>{
+    const $=q=>document.querySelector(q);const $$=q=>document.querySelectorAll(q);
+    $('#year').textContent=new Date().getFullYear();
 
-      // Contact form success banner
-      const form = document.getElementById('contactForm');
-      const success = document.getElementById('contactSuccess');
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
-        success.classList.remove('hidden');
-        success.scrollIntoView({behavior:'smooth', block:'center'});
-      });
+    // Contact form → Vercel API (/api/lead) → Airtable
+    const form=$('#contactForm'), ok=$('#contactSuccess'), errEl=$('#contactError');
+    form.addEventListener('submit',async(e)=>{
+      e.preventDefault(); errEl.classList.add('hidden'); ok.classList.add('hidden');
+      const fd=new FormData(form); if(fd.get('bot-field')) return; // honeypot
+      const payload={
+        name:fd.get('name')||'', email:fd.get('email')||'', date:fd.get('date')||'', venue:fd.get('venue')||'',
+        type:fd.get('type')||'', attendees:fd.get('attendees')||'', start_time:fd.get('start_time')||'', end_time:fd.get('end_time')||'',
+        source:fd.get('source')||'', note:fd.get('note')||'', ua:navigator.userAgent, referer:location.href
+      };
+      try{
+        const r=await fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});
+        if(!r.ok) throw new Error('bad');
+        ok.classList.remove('hidden'); ok.scrollIntoView({behavior:'smooth',block:'center'}); form.reset();
+      }catch(_){errEl.classList.remove('hidden'); errEl.scrollIntoView({behavior:'smooth',block:'center'});}
+    });
 
-      // "Proč právě já" toggle (open by default)
-      const whyToggle = document.querySelector('[data-why-toggle]');
-      const whyContent = document.querySelector('[data-why-content]');
-      const whyIcon = document.querySelector('[data-why-icon]');
-      whyToggle.addEventListener('click', function(){
-        const expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', String(!expanded));
-        if(expanded){
-          whyContent.style.maxHeight = '0px';
-          whyContent.style.opacity = '0';
-          whyIcon.classList.remove('rotate-180');
-        } else {
-          whyContent.style.maxHeight = '1000px';
-          whyContent.style.opacity = '1';
-          whyIcon.classList.add('rotate-180');
-        }
-      });
+    // Why toggle (open by default)
+    const wT=$('[data-why-toggle]'), wC=$('[data-why-content]'), wI=$('[data-why-icon]');
+    wT.addEventListener('click',()=>{const ex=wT.getAttribute('aria-expanded')==='true';wT.setAttribute('aria-expanded',String(!ex));if(ex){wC.style.maxHeight='0px';wC.style.opacity='0';wI.classList.remove('rotate-180');}else{wC.style.maxHeight='1000px';wC.style.opacity='1';wI.classList.add('rotate-180');}});
 
-      // FAQ accordions
-      document.querySelectorAll('[data-acc]').forEach(function(acc){
-        const btn = acc.querySelector('[data-acc-toggle]');
-        const content = acc.querySelector('[data-acc-content]');
-        const icon = acc.querySelector('[data-acc-icon]');
-        btn.addEventListener('click', function(){
-          const expanded = this.getAttribute('aria-expanded') === 'true';
-          this.setAttribute('aria-expanded', String(!expanded));
-          if(expanded){
-            content.style.maxHeight = '0px';
-            content.style.opacity = '0';
-            icon.classList.remove('rotate-180');
-          } else {
-            content.style.maxHeight = content.scrollHeight + 'px';
-            content.style.opacity = '1';
-            icon.classList.add('rotate-180');
-          }
-        });
-      });
+    // FAQ accordions
+    $$('[data-acc]').forEach(acc=>{const b=acc.querySelector('[data-acc-toggle]');const c=acc.querySelector('[data-acc-content]');const i=acc.querySelector('[data-acc-icon]');b.addEventListener('click',()=>{const ex=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!ex));if(ex){c.style.maxHeight='0px';c.style.opacity='0';i.classList.remove('rotate-180');}else{c.style.maxHeight=c.scrollHeight+'px';c.style.opacity='1';i.classList.add('rotate-180');}})});
 
-      // Logos swipe/drag scroll
-      const carousel = document.getElementById('logoCarousel');
-      const track = document.getElementById('logoTrack');
-      let isDown = false; let startX = 0; let scrollLeft = 0;
-      carousel.addEventListener('mousedown', (e)=>{ isDown = true; startX = e.pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft; });
-      carousel.addEventListener('mouseleave', ()=>{ isDown = false; });
-      carousel.addEventListener('mouseup', ()=>{ isDown = false; });
-      carousel.addEventListener('mousemove', (e)=>{ if(!isDown) return; e.preventDefault(); const x = e.pageX - carousel.offsetLeft; const walk = (x - startX); carousel.scrollLeft = scrollLeft - walk; });
-      // touch
-      carousel.addEventListener('touchstart', (e)=>{ isDown = true; startX = e.touches[0].pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft; }, {passive:true});
-      carousel.addEventListener('touchend', ()=>{ isDown = false; });
-      carousel.addEventListener('touchmove', (e)=>{ if(!isDown) return; const x = e.touches[0].pageX - carousel.offsetLeft; const walk = (x - startX); carousel.scrollLeft = scrollLeft - walk; }, {passive:false});
+    // Logos swipe/drag scroll
+    const car=$('#logoCarousel');let down=false,sx=0,sl=0;['mousedown','touchstart'].forEach(ev=>car.addEventListener(ev,e=>{down=true;sx=(e.touches?e.touches[0].pageX:e.pageX)-car.offsetLeft;sl=car.scrollLeft;},{passive:true}));
+    ['mouseleave','mouseup','touchend'].forEach(ev=>car.addEventListener(ev,()=>down=false));
+    car.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();const x=e.pageX-car.offsetLeft;car.scrollLeft=sl-(x-sx);});
+    car.addEventListener('touchmove',e=>{if(!down)return;const x=e.touches[0].pageX-car.offsetLeft;car.scrollLeft=sl-(x-sx);},{passive:false});
 
-      // Reveal on scroll for showcase tiles
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach((entry)=>{
-          if(entry.isIntersecting){
-            entry.target.classList.remove('opacity-0','translate-y-5');
-            entry.target.classList.add('opacity-100','translate-y-0');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-      document.querySelectorAll('[data-reveal]').forEach((el)=> io.observe(el));
+    // Reveal on scroll for showcase images
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.remove('opacity-0','translate-y-5');en.target.classList.add('opacity-100','translate-y-0');io.unobserve(en.target);}})},{threshold:.2});
+    $$('[data-reveal]').forEach(el=>io.observe(el));
 
-      // ------------------ Minimal tests (console) ------------------
-      try {
-        // Test 1: Why section open by default
-        console.assert(whyToggle.getAttribute('aria-expanded') === 'true', 'Test1: Proč právě já should be open by default');
-        // Test 2: Pricing cards count
-        console.assert(document.querySelectorAll('#balicky .rounded-2xl.border').length >= 3, 'Test2: Should render 3 pricing cards');
-        // Test 3: CTA hover class present
-        const cta = document.querySelector('a[href="#kontakt"].cta');
-        console.assert(cta && cta.className.includes('hover:-translate-y-1'), 'Test3: CTA has hover lift class');
-      } catch(err){ console.warn('Inline tests warning:', err); }
-    })();
+    // Tiny inline tests (console)
+    try{console.assert($('[data-why-toggle]').getAttribute('aria-expanded')==='true','Why should be open');console.assert($$('#balicky .rounded-2xl.border').length>=3,'3 pricing cards');console.assert(document.querySelector('a.cta').className.includes('glow-hover'),'CTA hover glow');}catch(e){console.warn('Inline tests warn:',e)}
+  })();
   </script>
 </body>
 </html>
