@@ -56,6 +56,14 @@
       {"@type":"Question","name":"Jak dlouho dopředu rezervovat svatebního DJ?","acceptedAnswer":{"@type":"Answer","text":"Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny."}}
     ]
   }</script>
+  <style>
+    /* === YourDJs: Gallery normalization (size & alignment) === */
+    #ukazky .grid > div{aspect-ratio:4/3;overflow:hidden;border-radius:1rem;background:rgba(255,255,255,0.06)}
+    #ukazky .grid > div > img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+    /* Prevent huge images causing layout shift */
+    #ukazky img{max-width:100%;height:auto}
+  </style>
+  <style>/* YourDJs: logo carousel snapping */#logoTrack{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}#logoTrack img{scroll-snap-align:start}</style>
 </head>
 <body class="min-h-screen bg-black text-white">
 
@@ -79,11 +87,9 @@
     <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.12)_0%,rgba(0,0,0,0)_45%)]"></div>
     <div class="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
       <p class="mt-1">
-        <span class="inline-block rounded-full p-[2px] bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">
+        <span class="inline-block rounded-full p-[2px] bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600">
           <span class="block rounded-full px-3 py-1 bg-black">
-            <span class="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text text-transparent text-[11px] sm:text-xs font-extrabold tracking-widest uppercase">
-              NEJLEPŠÍ A NEJŽÁDANĚJŠÍ SVATEBNÍ NOC PRO NOVOMANŽELE
-            </span>
+            <span class="text-white text-[11px] sm:text-xs font-extrabold tracking-widest uppercase">NEJLEPŠÍ A NEJŽÁDANĚJŠÍ SVATEBNÍ NOC PRO NOVOMANŽELE<\/span>
           </span>
         </span>
       </p>
@@ -115,7 +121,7 @@
   <section id="duvera" class="pt-0 py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-4 sm:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">5★ hodnocení párů</div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">5<span class=\"text-amber-400\">★<\/span> hodnocení párů</div>
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">Doporučují fotografové a svatební místa</div>
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">Spolehlivost & profesionalita</div>
       </div>
@@ -127,17 +133,17 @@
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <h3 class="text-center text-sm font-semibold tracking-wide text-white/60">Spolupracoval jsem / hrál jsem pro</h3>
       <div class="mt-6 overflow-hidden no-scrollbar" id="logoCarousel">
-        <div class="flex gap-6 py-2 select-none" id="logoTrack">
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-1.png" alt="Logo 1" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-2.png" alt="Logo 2" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-3.png" alt="Logo 3" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-4.png" alt="Logo 4" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-5.png" alt="Logo 5" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-6.png" alt="Logo 6" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-7.png" alt="Logo 7" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-8.png" alt="Logo 8" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-9.png" alt="Logo 9" class="h-12 w-40 object-contain grayscale shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-10.png" alt="Logo 10" class="h-12 w-40 object-contain grayscale shrink-0"/>
+        <div class="flex gap-6 py-2 select-none overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-4 px-4" id="logoTrack">
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
+          $1 $2/>
         </div>
       </div>
       <p class="mt-2 text-center text-xs text-white/50">(Swipe/drag →)</p>
@@ -289,7 +295,7 @@ $2
           <div>
             <h2 class="text-3xl font-bold">Poptávka termínu</h2>
             <div class="mt-3 rounded-xl border border-white/10 bg-white/5 p-4">
-              <p class="text-sm text-white/80"><span class="font-semibold">Nezávazná konzultace zdarma</span> — Pokud máte specifické otázky a neobvyklé potřeby pro svůj vysněný den, napište na uvedený e‑mail a vyřešíme vaše otázky: <a href="mailto:tomikhrin@gmail.com" class="font-semibold bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text text-transparent">tomikhrin@gmail.com</a>.</p>
+              <p class="text-sm text-white/80"><span class="font-semibold">Nezávazná konzultace zdarma</span> — Pokud máte specifické otázky a neobvyklé potřeby pro svůj vysněný den, napište na uvedený e‑mail a vyřešíme vaše otázky: <a href="mailto:tomikhrin@gmail.com" class="font-semibold bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">tomikhrin@gmail.com</a>.</p>
             </div>
             <p class="mt-4 text-white/70">Vyplňte krátký formulář – ozvu se do 24 hodin a pošlu nabídku na míru.</p>
             <ul class="mt-4 space-y-2 text-white/80">
