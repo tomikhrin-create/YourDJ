@@ -52,6 +52,15 @@
   </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"YourDJs — Svatební DJ","areaServed":["Morava","Slezsko"],"email":"mailto:tomikhrin@gmail.com","url":"https://tvoje-domena.cz/","image":"https://tvoje-domena.cz/assets/og.jpg","priceRange":"Cena na vyžádání","knowsAbout":["svatební DJ","ozvučení","svatební hry","moderování","svatební playlist"],"address":{"@type":"PostalAddress","addressCountry":"CZ"},"sameAs":[]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Kolik stojí svatební DJ na Moravě a ve Slezsku?","acceptedAnswer":{"@type":"Answer","text":"Cena je na vyžádání podle délky hraní, místa konání a techniky. Po odeslání formuláře obratem pošlu nabídku na míru."}},{"@type":"Question","name":"Jak vypadá playlist na svatbu a berete přání hostů?","acceptedAnswer":{"@type":"Answer","text":"Playlist stavím na míru – od evergreenů pro rodiče po aktuální hity. Během večera beru rozumné requesty a hlídám flow, aby byl parket plný."}},{"@type":"Question","name":"Máte vlastní ozvučení a světla?","acceptedAnswer":{"@type":"Answer","text":"Ano. Přivezu profesionální aparaturu a světelnou techniku včetně mikrofonu na proslovy. V případě potřeby mám záložní vybavení."}},{"@type":"Question","name":"Pomůžete s moderací a harmonogramem večera?","acceptedAnswer":{"@type":"Answer","text":"Ano, pomáhám s načasováním prvního tance, krájení dortu, her a dalších momentů tak, aby energie večera gradovala."}},{"@type":"Question","name":"Jak probíhá rezervace termínu a smlouva?","acceptedAnswer":{"@type":"Answer","text":"Po vyplnění formuláře potvrdím dostupnost, probereme představu a pošlu smlouvu s jasnými podmínkami. Záloha obvykle 20–30 %."}},{"@type":"Question","name":"Co když je váš termín obsazený?","acceptedAnswer":{"@type":"Answer","text":"Dám vědět ihned. Pokud už hraji jinde, doporučím ověřené kolegy z regionu. Případně nabídnu jiné dostupné datum."}},{"@type":"Question","name":"Hrajete i na venkovních svatbách / na zahradě?","acceptedAnswer":{"@type":"Answer","text":"Ano, pokud je k dispozici přívod elektřiny a suché kryté místo pro techniku. Přizpůsobím aparaturu prostoru i počtu hostů."}},{"@type":"Question","name":"Jaké písně doporučujete na první tanec?","acceptedAnswer":{"@type":"Answer","text":"Pošlu vám kurátorovaný seznam 50 ověřených skladeb pro první tanec i rodiče. Rád poradím s výběrem podle stylu vaší svatby."}},{"@type":"Question","name":"Dojezd a cestovné po Moravě a Slezsku","acceptedAnswer":{"@type":"Answer","text":"Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem."}},{"@type":"Question","name":"Jak dlouho dopředu rezervovat svatebního DJ?","acceptedAnswer":{"@type":"Answer","text":"Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny."}}]}</script>
+  <style>
+    /* Edge fades for carousels */
+    .edge-fade{pointer-events:none;position:absolute;top:0;bottom:0;width:48px}
+    .edge-left{left:0;background:linear-gradient(90deg,rgba(0,0,0,1),rgba(0,0,0,0))}
+    .edge-right{right:0;background:linear-gradient(270deg,rgba(0,0,0,1),rgba(0,0,0,0))}
+    /* Blur-up for gallery images */
+    .blur-up{filter:blur(12px);transform:scale(1.02);opacity:.85}
+    .blur-up.loaded{filter:none;transform:none;opacity:1;transition:filter .4s ease,transform .4s ease,opacity .4s ease}
+  </style>
 </head>
 <body class="min-h-screen bg-black text-white">
 
@@ -119,19 +128,30 @@
   <section id="logos" class="py-10">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <h3 class="text-center text-sm font-semibold tracking-wide text-white/60">Spolupracoval jsem / hrál jsem pro</h3>
-      <div class="mt-6 overflow-hidden no-scrollbar" id="logoCarousel">
-        <div class="flex gap-6 py-2 select-none overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-4 px-4" id="logoTrack">
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-1.png" alt="Logo 1" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-2.png" alt="Logo 2" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-3.png" alt="Logo 3" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-4.png" alt="Logo 4" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-5.png" alt="Logo 5" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-6.png" alt="Logo 6" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-7.png" alt="Logo 7" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-8.png" alt="Logo 8" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-9.png" alt="Logo 9" class="h-12 w-40 object-contain shrink-0"/>
-          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-10.png" alt="Logo 10" class="h-12 w-40 object-contain shrink-0"/>
-        </div>
+      <div class="relative mt-6 no-scrollbar" id="logoCarousel">
+  <button id="logoPrev" type="button" aria-label="Předchozí loga" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
+    <span class="sr-only">Předchozí</span>
+    <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <div class="edge-fade edge-left"></div>
+  <div class="edge-fade edge-right"></div>
+  <div class="flex gap-6 py-2 select-none overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-4 px-4" id="logoTrack">
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-1.png" alt="Logo 1" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-2.png" alt="Logo 2" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-3.png" alt="Logo 3" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-4.png" alt="Logo 4" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-5.png" alt="Logo 5" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-6.png" alt="Logo 6" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-7.png" alt="Logo 7" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-8.png" alt="Logo 8" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-9.png" alt="Logo 9" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+    <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-10.png" alt="Logo 10" class="h-12 w-40 object-contain shrink-0 snap-start"/>
+  </div>
+  <button id="logoNext" type="button" aria-label="Další loga" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
+    <span class="sr-only">Další</span>
+    <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+</div>
       </div>
       <p class="mt-2 text-center text-xs text-white/50">(Swipe/drag →)</p>
     </div>
@@ -139,19 +159,66 @@
 
   <!-- SHOWCASE (fade/slide images) -->
   <section id="ukazky" class="bg-black py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold reveal">Ukázky atmosféry</h2>
-      <p class="mt-2 text-white/70 reveal">První tanec, večerní párty, multi-žánrový set pro mladé i rodiče.</p>
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
-        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
+  <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold reveal">Ukázky atmosféry</h2>
+    <p class="mt-2 text-white/70 reveal">První tanec, večerní párty, multi‑žánrový set pro mladé i rodiče.</p>
+
+    <div class="relative mt-8" id="galleryCarousel">
+      <button id="galleryPrev" type="button" aria-label="Předchozí foto" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40 sm:hidden">
+        <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="edge-fade edge-left sm:hidden"></div>
+      <div class="edge-fade edge-right sm:hidden"></div>
+
+      <!-- One container that acts as carousel on mobile and grid on ≥sm -->
+      <div id="galleryTrack" class="grid grid-flow-col auto-cols-[88%] sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar">
+        
+        <!-- 1..18 images -->
+        
+        <!--#1-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
+        <!--#2-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
+        <!--#3-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
+        <!--#4-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
+        <!--#5-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
+        <!--#6-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
+        <!--#7-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/7.webp" onerror="this.onerror=null;this.src='/assets/gallery/7.jpg'" alt="Ukázka atmosféry 7"/></div>
+        <!--#8-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/8.webp" onerror="this.onerror=null;this.src='/assets/gallery/8.jpg'" alt="Ukázka atmosféry 8"/></div>
+        <!--#9-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/9.webp" onerror="this.onerror=null;this.src='/assets/gallery/9.jpg'" alt="Ukázka atmosféry 9"/></div>
+        <!--#10-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/10.webp" onerror="this.onerror=null;this.src='/assets/gallery/10.jpg'" alt="Ukázka atmosféry 10"/></div>
+        <!--#11-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/11.webp" onerror="this.onerror=null;this.src='/assets/gallery/11.jpg'" alt="Ukázka atmosféry 11"/></div>
+        <!--#12-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/12.webp" onerror="this.onerror=null;this.src='/assets/gallery/12.jpg'" alt="Ukázka atmosféry 12"/></div>
+        <!--#13-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/13.webp" onerror="this.onerror=null;this.src='/assets/gallery/13.jpg'" alt="Ukázka atmosféry 13"/></div>
+        <!--#14-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/14.webp" onerror="this.onerror=null;this.src='/assets/gallery/14.jpg'" alt="Ukázka atmosféry 14"/></div>
+        <!--#15-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/15.webp" onerror="this.onerror=null;this.src='/assets/gallery/15.jpg'" alt="Ukázka atmosféry 15"/></div>
+        <!--#16-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/16.webp" onerror="this.onerror=null;this.src='/assets/gallery/16.jpg'" alt="Ukázka atmosféry 16"/></div>
+        <!--#17-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/17.webp" onerror="this.onerror=null;this.src='/assets/gallery/17.jpg'" alt="Ukázka atmosféry 17"/></div>
+        <!--#18-->
+        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/18.webp" onerror="this.onerror=null;this.src='/assets/gallery/18.jpg'" alt="Ukázka atmosféry 18"/></div>
       </div>
+
+      <button id="galleryNext" type="button" aria-label="Další foto" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40 sm:hidden">
+        <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- GUARANTEE -->
   <section id="garance" class="py-14 sm:py-20">
@@ -469,6 +536,28 @@
           });
         });
       }
+          // === Carousels (logos & gallery) ===
+      function ydjInitScroller(trackId, prevId, nextId){
+        var track=document.getElementById(trackId);
+        var prev=document.getElementById(prevId);
+        var next=document.getElementById(nextId);
+        if(!track||!prev||!next) return;
+        function step(){ return Math.ceil(track.clientWidth*0.9); }
+        function update(){ var max=track.scrollWidth-track.clientWidth; var x=track.scrollLeft; prev.disabled = x<=0; next.disabled = x>=max-1; }
+        prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
+        next.addEventListener('click', function(){ track.scrollBy({left: step(), behavior:'smooth'}); });
+        track.addEventListener('scroll', update);
+        window.addEventListener('resize', update);
+        update();
+      }
+      ydjInitScroller('logoTrack','logoPrev','logoNext');
+      ydjInitScroller('galleryTrack','galleryPrev','galleryNext');
+
+      // Blur-up once images loaded (gallery)
+      document.querySelectorAll('#galleryTrack img').forEach(function(img){
+        function done(){ img.classList.add('loaded'); }
+        if(img.complete){ done(); } else { img.addEventListener('load', done, { once:true }); }
+      });
     })();
   </script>
 </body>
