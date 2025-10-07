@@ -35,10 +35,10 @@
     #duvera .sp-card{position:relative;border-radius:1rem;background:rgba(255,255,255,.05)}
     #duvera .sp-card::before{content:"";position:absolute;inset:0;padding:1px;border-radius:1rem;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
 
-    /* Gallery normalization */
-    #ukazky .grid>div{aspect-ratio:4/3;overflow:hidden;border-radius:1rem;background:rgba(255,255,255,0.06)}
-    #ukazky .grid>div>img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
-    #ukazky img{max-width:100%;height:auto}
+    /* Gallery – two-row horizontal carousel (no vertical stacking) */
+    #galleryTrack{--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem}
+    #galleryTrack .g-item{width:100%;height:100%;border-radius:1rem;overflow:hidden;background:rgba(255,255,255,.06);scroll-snap-align:start}
+    #galleryTrack .g-item img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 
     /* Logo carousel snapping */
     #logoTrack{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
@@ -164,56 +164,36 @@
     <p class="mt-2 text-white/70 reveal">První tanec, večerní párty, multi‑žánrový set pro mladé i rodiče.</p>
 
     <div class="relative mt-8" id="galleryCarousel">
-      <button id="galleryPrev" type="button" aria-label="Předchozí foto" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40 sm:hidden">
+      <button id="galleryPrev" type="button" aria-label="Předchozí foto" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
         <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
-      <div class="edge-fade edge-left sm:hidden"></div>
-      <div class="edge-fade edge-right sm:hidden"></div>
+      <div class="edge-fade edge-left"></div>
+      <div class="edge-fade edge-right"></div>
 
-      <!-- One container that acts as carousel on mobile and grid on ≥sm -->
-      <div id="galleryTrack" class="grid grid-flow-col auto-cols-[88%] sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar">
-        
-        <!-- 1..18 images -->
-        
-        <!--#1-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
-        <!--#2-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
-        <!--#3-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
-        <!--#4-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
-        <!--#5-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
-        <!--#6-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
-        <!--#7-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/7.webp" onerror="this.onerror=null;this.src='/assets/gallery/7.jpg'" alt="Ukázka atmosféry 7"/></div>
-        <!--#8-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/8.webp" onerror="this.onerror=null;this.src='/assets/gallery/8.jpg'" alt="Ukázka atmosféry 8"/></div>
-        <!--#9-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/9.webp" onerror="this.onerror=null;this.src='/assets/gallery/9.jpg'" alt="Ukázka atmosféry 9"/></div>
-        <!--#10-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/10.webp" onerror="this.onerror=null;this.src='/assets/gallery/10.jpg'" alt="Ukázka atmosféry 10"/></div>
-        <!--#11-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/11.webp" onerror="this.onerror=null;this.src='/assets/gallery/11.jpg'" alt="Ukázka atmosféry 11"/></div>
-        <!--#12-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/12.webp" onerror="this.onerror=null;this.src='/assets/gallery/12.jpg'" alt="Ukázka atmosféry 12"/></div>
-        <!--#13-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/13.webp" onerror="this.onerror=null;this.src='/assets/gallery/13.jpg'" alt="Ukázka atmosféry 13"/></div>
-        <!--#14-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/14.webp" onerror="this.onerror=null;this.src='/assets/gallery/14.jpg'" alt="Ukázka atmosféry 14"/></div>
-        <!--#15-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/15.webp" onerror="this.onerror=null;this.src='/assets/gallery/15.jpg'" alt="Ukázka atmosféry 15"/></div>
-        <!--#16-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/16.webp" onerror="this.onerror=null;this.src='/assets/gallery/16.jpg'" alt="Ukázka atmosféry 16"/></div>
-        <!--#17-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/17.webp" onerror="this.onerror=null;this.src='/assets/gallery/17.jpg'" alt="Ukázka atmosféry 17"/></div>
-        <!--#18-->
-        <div class="snap-start aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/18.webp" onerror="this.onerror=null;this.src='/assets/gallery/18.jpg'" alt="Ukázka atmosféry 18"/></div>
+      <!-- Two rows visible; more photos scroll horizontally -->
+      <div id="galleryTrack" class="no-scrollbar">
+        <!-- 1..18 items -->
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/7.webp" onerror="this.onerror=null;this.src='/assets/gallery/7.jpg'" alt="Ukázka atmosféry 7"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/8.webp" onerror="this.onerror=null;this.src='/assets/gallery/8.jpg'" alt="Ukázka atmosféry 8"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/9.webp" onerror="this.onerror=null;this.src='/assets/gallery/9.jpg'" alt="Ukázka atmosféry 9"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/10.webp" onerror="this.onerror=null;this.src='/assets/gallery/10.jpg'" alt="Ukázka atmosféry 10"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/11.webp" onerror="this.onerror=null;this.src='/assets/gallery/11.jpg'" alt="Ukázka atmosféry 11"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/12.webp" onerror="this.onerror=null;this.src='/assets/gallery/12.jpg'" alt="Ukázka atmosféry 12"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/13.webp" onerror="this.onerror=null;this.src='/assets/gallery/13.jpg'" alt="Ukázka atmosféry 13"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/14.webp" onerror="this.onerror=null;this.src='/assets/gallery/14.jpg'" alt="Ukázka atmosféry 14"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/15.webp" onerror="this.onerror=null;this.src='/assets/gallery/15.jpg'" alt="Ukázka atmosféry 15"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/16.webp" onerror="this.onerror=null;this.src='/assets/gallery/16.jpg'" alt="Ukázka atmosféry 16"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/17.webp" onerror="this.onerror=null;this.src='/assets/gallery/17.jpg'" alt="Ukázka atmosféry 17"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/18.webp" onerror="this.onerror=null;this.src='/assets/gallery/18.jpg'" alt="Ukázka atmosféry 18"/></div>
       </div>
 
-      <button id="galleryNext" type="button" aria-label="Další foto" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40 sm:hidden">
+      <button id="galleryNext" type="button" aria-label="Další foto" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
         <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
       </button>
     </div>
@@ -343,7 +323,7 @@
           <div>
             <h2 class="text-3xl font-bold">Poptávka termínu</h2>
             <div class="mt-3 rounded-xl border border-white/10 bg-white/5 p-4">
-              <p class="text-sm text-white/80"><span class="font-semibold">Nezávazná konzultace zdarma</span> — Pokud máte specifické otázky a neobvyklé potřeby pro svůj vysněný den, napište na uvedený e‑mail a vyřešíme vaše otázky: <a href="mailto:tomikhrin@gmail.com" class="font-semibold bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">tomikhrin@gmail.com</a>.</p>
+              <p class="text-sm text-white/80"><span class="font-semibold">Nezávazná konzultace zdarma</span> — Pokud máte specifické otázky a neobvyklé potřeby pro svůj vysněný den, napište na uvedený e‑mail a vyřešíme vaše otázky: <a href="mailto:E-mail: tomikhrin@gmail.com, Tel: 732 585 550" class="font-semibold bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">tomikhrin@gmail.com</a>.</p>
             </div>
             <p class="mt-4 text-white/70">Vyplňte krátký formulář – ozvu se do 24 hodin a pošlu nabídku na míru.</p>
             <ul class="mt-4 space-y-2 text-white/80">
@@ -399,7 +379,7 @@
               <textarea id="note2" name="note" rows="4" placeholder="Představa hudby, první tanec, speciální požadavky…" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"></textarea>
             </div>
             <div id="contactSuccess" class="hidden rounded-xl bg-emerald-900/40 p-3 text-sm text-emerald-300">Díky! Vaše poptávka byla odeslána. Ozvu se vám do 24 hodin.</div>
-            <div id="contactError" class="hidden rounded-xl bg-red-900/40 p-3 text-sm text-red-200">Něco se nepovedlo. Zkuste to prosím znovu nebo napište na E-mail: tomikhrin@gmail.com, Tel: 732 585 550</div>
+            <div id="contactError" class="hidden rounded-xl bg-red-900/40 p-3 text-sm text-red-200">Něco se nepovedlo. Zkuste to prosím znovu nebo napište na tomikhrin@gmail.com.</div>
             <div class="flex items-center gap-3">
               <button type="submit" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Odeslat poptávku</button>
               <span class="text-sm text-white/60">* Odpovím do 24 hodin</span>
