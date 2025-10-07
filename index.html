@@ -22,48 +22,36 @@
   <meta name="twitter:image" content="https://tvoje-domena.cz/assets/og.jpg"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+    /* Utilities */
+    .no-scrollbar::-webkit-scrollbar{display:none}
+    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
     .glow-hover:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(251,191,36,.25),0 0 24px rgba(245,158,11,.55)}
     .glow-hover{transition:transform .2s ease,box-shadow .2s ease}
     img[loading="lazy"]{content-visibility:auto}
-  .fluid-title{font-size:clamp(2rem,8vw,3.5rem)}.balance{text-wrap:balance} </style>
-  <script type="application/ld+json">{
-    "@context":"https://schema.org",
-    "@type":"LocalBusiness",
-    "name":"YourDJs — Svatební DJ",
-    "areaServed":["Morava","Slezsko"],
-    "email":"mailto:tomikhrin@gmail.com",
-    "url":"https://tvoje-domena.cz/",
-    "image":"https://tvoje-domena.cz/assets/og.jpg",
-    "priceRange":"Cena na vyžádání",
-    "knowsAbout":["svatební DJ","ozvučení","svatební hry","moderování","svatební playlist"],
-    "address":{"@type":"PostalAddress","addressCountry":"CZ"},
-    "sameAs":[]
-  }</script>
-  <script type="application/ld+json">{
-    "@context":"https://schema.org",
-    "@type":"FAQPage",
-    "mainEntity":[
-      {"@type":"Question","name":"Kolik stojí svatební DJ na Moravě a ve Slezsku?","acceptedAnswer":{"@type":"Answer","text":"Cena je na vyžádání podle délky hraní, místa konání a techniky. Po odeslání formuláře obratem pošlu nabídku na míru."}},
-      {"@type":"Question","name":"Jak vypadá playlist na svatbu a berete přání hostů?","acceptedAnswer":{"@type":"Answer","text":"Playlist stavím na míru – od evergreenů pro rodiče po aktuální hity. Během večera beru rozumné requesty a hlídám flow, aby byl parket plný."}},
-      {"@type":"Question","name":"Máte vlastní ozvučení a světla?","acceptedAnswer":{"@type":"Answer","text":"Ano. Přivezu profesionální aparaturu a světelnou techniku včetně mikrofonu na proslovy. V případě potřeby mám záložní vybavení."}},
-      {"@type":"Question","name":"Pomůžete s moderací a harmonogramem večera?","acceptedAnswer":{"@type":"Answer","text":"Ano, pomáhám s načasováním prvního tance, krájení dortu, her a dalších momentů tak, aby energie večera gradovala."}},
-      {"@type":"Question","name":"Jak probíhá rezervace termínu a smlouva?","acceptedAnswer":{"@type":"Answer","text":"Po vyplnění formuláře potvrdím dostupnost, probereme představu a pošlu smlouvu s jasnými podmínkami. Záloha obvykle 20–30 %."}},
-      {"@type":"Question","name":"Co když je váš termín obsazený?","acceptedAnswer":{"@type":"Answer","text":"Dám vědět ihned. Pokud už hraji jinde, doporučím ověřené kolegy z regionu. Případně nabídnu jiné dostupné datum."}},
-      {"@type":"Question","name":"Hrajete i na venkovních svatbách \/ na zahradě?","acceptedAnswer":{"@type":"Answer","text":"Ano, pokud je k dispozici přívod elektřiny a suché kryté místo pro techniku. Přizpůsobím aparaturu prostoru i počtu hostů."}},
-      {"@type":"Question","name":"Jaké písně doporučujete na první tanec?","acceptedAnswer":{"@type":"Answer","text":"Pošlu kurátorovaný seznam 50 ověřených skladeb pro první tanec i rodiče. Rád poradím s výběrem podle stylu vaší svatby."}},
-      {"@type":"Question","name":"Dojezd a cestovné po Moravě a Slezsku","acceptedAnswer":{"@type":"Answer","text":"Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem."}},
-      {"@type":"Question","name":"Jak dlouho dopředu rezervovat svatebního DJ?","acceptedAnswer":{"@type":"Answer","text":"Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny."}}
-    ]
-  }</script>
-  <style>
-    /* === YourDJs: Gallery normalization (size & alignment) === */
-    #ukazky .grid > div{aspect-ratio:4/3;overflow:hidden;border-radius:1rem;background:rgba(255,255,255,0.06)}
-    #ukazky .grid > div > img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
-    /* Prevent huge images causing layout shift */
+    .fluid-title{font-size:clamp(2rem,8vw,3.5rem)}
+    .balance{text-wrap:balance}
+
+    /* Social proof: subtle white gradient border */
+    #duvera .sp-card{position:relative;border-radius:1rem;background:rgba(255,255,255,.05)}
+    #duvera .sp-card::before{content:"";position:absolute;inset:0;padding:1px;border-radius:1rem;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+
+    /* Gallery normalization */
+    #ukazky .grid>div{aspect-ratio:4/3;overflow:hidden;border-radius:1rem;background:rgba(255,255,255,0.06)}
+    #ukazky .grid>div>img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
     #ukazky img{max-width:100%;height:auto}
+
+    /* Logo carousel snapping */
+    #logoTrack{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+    #logoTrack img{scroll-snap-align:start}
+
+    /* Progressive text reveal */
+    .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.in{opacity:1;transform:translateY(0)}
+    @media (max-width:640px){.reveal{transition-duration:.85s}}
+    @media (prefers-reduced-motion:reduce){.reveal,.reveal.in{opacity:1;transform:none;transition:none}}
   </style>
-  <style>/* YourDJs: logo carousel snapping */#logoTrack{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}#logoTrack img{scroll-snap-align:start}</style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"YourDJs — Svatební DJ","areaServed":["Morava","Slezsko"],"email":"mailto:tomikhrin@gmail.com","url":"https://tvoje-domena.cz/","image":"https://tvoje-domena.cz/assets/og.jpg","priceRange":"Cena na vyžádání","knowsAbout":["svatební DJ","ozvučení","svatební hry","moderování","svatební playlist"],"address":{"@type":"PostalAddress","addressCountry":"CZ"},"sameAs":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Kolik stojí svatební DJ na Moravě a ve Slezsku?","acceptedAnswer":{"@type":"Answer","text":"Cena je na vyžádání podle délky hraní, místa konání a techniky. Po odeslání formuláře obratem pošlu nabídku na míru."}},{"@type":"Question","name":"Jak vypadá playlist na svatbu a berete přání hostů?","acceptedAnswer":{"@type":"Answer","text":"Playlist stavím na míru – od evergreenů pro rodiče po aktuální hity. Během večera beru rozumné requesty a hlídám flow, aby byl parket plný."}},{"@type":"Question","name":"Máte vlastní ozvučení a světla?","acceptedAnswer":{"@type":"Answer","text":"Ano. Přivezu profesionální aparaturu a světelnou techniku včetně mikrofonu na proslovy. V případě potřeby mám záložní vybavení."}},{"@type":"Question","name":"Pomůžete s moderací a harmonogramem večera?","acceptedAnswer":{"@type":"Answer","text":"Ano, pomáhám s načasováním prvního tance, krájení dortu, her a dalších momentů tak, aby energie večera gradovala."}},{"@type":"Question","name":"Jak probíhá rezervace termínu a smlouva?","acceptedAnswer":{"@type":"Answer","text":"Po vyplnění formuláře potvrdím dostupnost, probereme představu a pošlu smlouvu s jasnými podmínkami. Záloha obvykle 20–30 %."}},{"@type":"Question","name":"Co když je váš termín obsazený?","acceptedAnswer":{"@type":"Answer","text":"Dám vědět ihned. Pokud už hraji jinde, doporučím ověřené kolegy z regionu. Případně nabídnu jiné dostupné datum."}},{"@type":"Question","name":"Hrajete i na venkovních svatbách / na zahradě?","acceptedAnswer":{"@type":"Answer","text":"Ano, pokud je k dispozici přívod elektřiny a suché kryté místo pro techniku. Přizpůsobím aparaturu prostoru i počtu hostů."}},{"@type":"Question","name":"Jaké písně doporučujete na první tanec?","acceptedAnswer":{"@type":"Answer","text":"Pošlu vám kurátorovaný seznam 50 ověřených skladeb pro první tanec i rodiče. Rád poradím s výběrem podle stylu vaší svatby."}},{"@type":"Question","name":"Dojezd a cestovné po Moravě a Slezsku","acceptedAnswer":{"@type":"Answer","text":"Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem."}},{"@type":"Question","name":"Jak dlouho dopředu rezervovat svatebního DJ?","acceptedAnswer":{"@type":"Answer","text":"Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny."}}]}</script>
 </head>
 <body class="min-h-screen bg-black text-white">
 
@@ -86,31 +74,30 @@
   <section id="top" class="relative overflow-hidden py-14 sm:py-20">
     <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.12)_0%,rgba(0,0,0,0)_45%)]"></div>
     <div class="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-      <p class="mt-1">
+      <p class="mt-1 reveal">
         <span class="inline-block rounded-full p-[2px] bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600">
           <span class="block rounded-full px-3 py-1 bg-black">
-            <span class="text-white text-[11px] sm:text-xs font-extrabold tracking-widest uppercase">NEJLEPŠÍ A NEJŽÁDANĚJŠÍ SVATEBNÍ NOC PRO NOVOMANŽELE<\/span>
+            <span class="text-white text-[11px] sm:text-xs font-extrabold tracking-widest uppercase">NEJLEPŠÍ A NEJŽÁDANĚJŠÍ SVATEBNÍ NOC PRO NOVOMANŽELE</span>
           </span>
         </span>
       </p>
-      <h1 class="mt-2 font-extrabold leading-[1.1] fluid-title balance px-2">
+      <h1 class="mt-2 font-extrabold leading-[1.1] fluid-title balance px-2 reveal">
         <span class="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent uppercase">NEZAPOMENUTELNÝ SVATEBNÍ DEN</span>
       </h1>
-      <div class="mt-8">
+      <div class="mt-8 reveal">
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-3">
-          <!-- Replace src with your /public/assets/hero.mp4 and poster with hero.jpg -->
           <video class="w-full aspect-video rounded-xl" controls preload="none" poster="/assets/hero-poster.jpg">
             <source src="/assets/hero.mp4" type="video/mp4"/>
           </video>
         </div>
       </div>
       <ul class="mt-8 flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-6 gap-y-2 text-white/80">
-        <li class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">150 + svatebních akcí</span></li>
-        <li class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Profesionální zvuk</span></li>
-        <li class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Playlist na míru</span></li>
-        <li class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Rychlá domluva</span></li>
+        <li class="flex items-center gap-2 reveal"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">150 + svatebních akcí</span></li>
+        <li class="flex items-center gap-2 reveal"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Profesionální zvuk</span></li>
+        <li class="flex items-center gap-2 reveal"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Playlist na míru</span></li>
+        <li class="flex items-center gap-2 reveal"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">Rychlá domluva</span></li>
       </ul>
-      <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+      <div class="mt-7 flex flex-wrap items-center justify-center gap-3 reveal">
         <a href="#kontakt" class="cta inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci rezervovat termín</a>
         <a href="#ukazky" class="rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:border-white/40">Mrknout na ukázky</a>
       </div>
@@ -121,9 +108,9 @@
   <section id="duvera" class="pt-0 py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-4 sm:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">5<span class=\"text-amber-400\">★<\/span> hodnocení párů</div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">Doporučují fotografové a svatební místa</div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-5 text-center font-semibold text-white/80">Spolehlivost & profesionalita</div>
+        <div class="sp-card p-5 text-center font-semibold text-white/80 reveal">5 ⭐ hodnocení párů</div>
+        <div class="sp-card p-5 text-center font-semibold text-white/80 reveal">Doporučují fotografové a svatební místa</div>
+        <div class="sp-card p-5 text-center font-semibold text-white/80 reveal">Spolehlivost & profesionalita</div>
       </div>
     </div>
   </section>
@@ -134,16 +121,16 @@
       <h3 class="text-center text-sm font-semibold tracking-wide text-white/60">Spolupracoval jsem / hrál jsem pro</h3>
       <div class="mt-6 overflow-hidden no-scrollbar" id="logoCarousel">
         <div class="flex gap-6 py-2 select-none overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-4 px-4" id="logoTrack">
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
-          $1 $2/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-1.png" alt="Logo 1" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-2.png" alt="Logo 2" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-3.png" alt="Logo 3" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-4.png" alt="Logo 4" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-5.png" alt="Logo 5" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-6.png" alt="Logo 6" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-7.png" alt="Logo 7" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-8.png" alt="Logo 8" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-9.png" alt="Logo 9" class="h-12 w-40 object-contain shrink-0"/>
+          <img loading="lazy" decoding="async" onerror="this.style.display='none'" src="/assets/logos/logo-10.png" alt="Logo 10" class="h-12 w-40 object-contain shrink-0"/>
         </div>
       </div>
       <p class="mt-2 text-center text-xs text-white/50">(Swipe/drag →)</p>
@@ -151,31 +138,25 @@
   </section>
 
   <!-- SHOWCASE (fade/slide images) -->
-  $1
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1" class="h-full w-full object-cover"/>
-  </div>
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2" class="h-full w-full object-cover"/>
-  </div>
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3" class="h-full w-full object-cover"/>
-  </div>
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4" class="h-full w-full object-cover"/>
-  </div>
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5" class="h-full w-full object-cover"/>
-  </div>
-  <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
-    <img loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6" class="h-full w-full object-cover"/>
-  </div>
-$2
+  <section id="ukazky" class="bg-black py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold reveal">Ukázky atmosféry</h2>
+      <p class="mt-2 text-white/70 reveal">První tanec, večerní párty, multi-žánrový set pro mladé i rodiče.</p>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
+        <div class="reveal"><img loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
+      </div>
+    </div>
+  </section>
 
   <!-- GUARANTEE -->
   <section id="garance" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center ring-2 ring-amber-500 shadow-[0_0_24px_rgba(245,158,11,0.28),0_0_6px_rgba(245,158,11,0.18)]">
+      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center ring-2 ring-amber-500 shadow-[0_0_24px_rgba(245,158,11,0.28),0_0_6px_rgba(245,158,11,0.18)] reveal">
         <h3 class="text-2xl font-extrabold">Garance spokojenosti</h3>
         <p class="mx-auto mt-3 max-w-2xl text-white/70">Věřím své práci. Pokud se hosté nezvednou k tanci, zůstanu o hodinu déle zdarma. Společně předem nastavíme styl večera, aby si ho užili mladí, rodiče i prarodiče.</p>
         <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-5 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Chci mít jistotu</a>
@@ -186,10 +167,10 @@ $2
   <!-- PRICING (static cards) -->
   <section id="balicky" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold">Balíčky — cena na vyžádání</h2>
-      <p class="mt-2 text-white/70">Vyberte si rozsah služeb a napište mi o přesnou nabídku dle místa, času a techniky.</p>
+      <h2 class="text-3xl font-bold reveal">Balíčky — cena na vyžádání</h2>
+      <p class="mt-2 text-white/70 reveal">Vyberte si rozsah služeb a napište mi o přesnou nabídku dle místa, času a techniky.</p>
       <div class="mt-8 grid gap-6 lg:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
+        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
           <div class="flex items-baseline justify-between"><h3 class="text-xl font-bold">Classic</h3><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
             <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 8 hodin</li>
@@ -199,7 +180,7 @@ $2
           </ul>
           <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 ring-2 ring-amber-500">
+        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 ring-2 ring-amber-500 reveal">
           <div class="flex items-baseline justify-between"><div class="flex items-center gap-2"><h3 class="text-xl font-bold">Premium</h3><span class="rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-2 py-1 text-xs font-extrabold text-black">Nejoblíbenější</span></div><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
             <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 12 hodin</li>
@@ -210,7 +191,7 @@ $2
           </ul>
           <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Mám zájem</a>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
+        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
           <div class="flex items-baseline justify-between"><h3 class="text-xl font-bold">Deluxe</h3><span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span></div>
           <ul class="mt-5 space-y-2 text-white/80">
             <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set dle domluvy (nad 12 h)</li>
@@ -228,24 +209,23 @@ $2
   <!-- REVIEWS -->
   <section id="recenze" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold">Recenze novomanželů</h2>
+      <h2 class="text-3xl font-bold reveal">Recenze novomanželů</h2>
       <div class="mt-6 grid gap-6 md:grid-cols-3">
-        <!-- Replace avatars & names -->
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/1.webp" alt="Recenze 1" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Katka & Martin</figcaption>
           </div>
           <blockquote class="mt-3 text-white/80 text-sm leading-relaxed">Parket byl plný celý večer. Skvělý výběr hudby pro všechny věkové skupiny a profesionální moderace.</blockquote>
         </figure>
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/2.webp" alt="Recenze 2" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Tereza & Pavel</figcaption>
           </div>
           <blockquote class="mt-3 text-white/80 text-sm leading-relaxed">Skvělá domluva, playlist na míru. Perfektní atmosféra od prvního tance až do rána.</blockquote>
         </figure>
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/3.webp" alt="Recenze 3" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Lucie & Honza</figcaption>
@@ -276,10 +256,11 @@ $2
           </ul>
         </div>
       </div>
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
+      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
         <h3 class="text-xl font-bold">Bonusy k rezervaci</h3>
         <ul class="mt-4 space-y-2 text-white/80">
-          <li class="flex gap-2"><span class="text-amber-400">✓</span>1 hodina konzultace zdarma – plán hudby a harmonogramu</li>          <li class="flex gap-2"><span class="text-amber-400">✓</span>Zdarma e-book s nejlepšími svatebními hrami</li>
+          <li class="flex gap-2"><span class="text-amber-400">✓</span>1 hodina konzultace zdarma – plán hudby a harmonogramu</li>
+          <li class="flex gap-2"><span class="text-amber-400">✓</span>Zdarma e-book s nejlepšími svatebními hrami</li>
           <li class="flex gap-2"><span class="text-amber-400">✓</span>After‑party playlist jako vzpomínka</li>
         </ul>
         <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
@@ -290,7 +271,7 @@ $2
   <!-- CONTACT / CTA -->
   <section id="kontakt" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6">
+      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
         <div class="grid gap-6 lg:grid-cols-2">
           <div>
             <h2 class="text-3xl font-bold">Poptávka termínu</h2>
@@ -365,8 +346,8 @@ $2
   <!-- FAQ -->
   <section id="faq" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold">Časté otázky – Svatební DJ Morava & Slezsko</h2>
-      <p class="mt-1 text-white/70 text-sm">Praktické informace o playlistu, technice, moderaci a rezervaci termínu. SEO: svatební DJ Morava, DJ na svatbu Slezsko, svatební DJ cena na vyžádání.</p>
+      <h2 class="text-3xl font-bold reveal">Časté otázky – Svatební DJ Morava & Slezsko</h2>
+      <p class="mt-1 text-white/70 text-sm reveal">Praktické informace o playlistu, technice, moderaci a rezervaci termínu. SEO: svatební DJ Morava, DJ na svatbu Slezsko, svatební DJ cena na vyžádání.</p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         <!-- FAQ items -->
         <div class="rounded-xl border border-white/10 bg-white/5" data-acc>
@@ -406,4 +387,89 @@ $2
           <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem.</div>
         </div>
         <div class="rounded-2xl border border-white/10 bg-white/5" data-acc>
-          <button class="w-full f
+          <button class="w-full flex items-center justify-between text-left p-5 text-lg font-semibold" data-acc-toggle aria-expanded="false"><span>Jak dlouho dopředu rezervovat svatebního DJ?</span><svg class="h-5 w-5 transition" data-acc-icon viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg></button>
+          <div class="px-5 pb-5 text-base leading-relaxed text-white/80 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" data-acc-content style="max-height:0;opacity:0">Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 py-10 text-sm text-white/60">
+    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-3 sm:flex-row">
+      <p>© <span id="year"></span> YourDJs™ — Svatební DJ</p>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-white">Zásady ochrany osobních údajů</a>
+        <a href="#" class="hover:text-white">Obchodní podmínky</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      // Year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Reveal on scroll (staggered)
+      var idx=0; var revealEls = document.querySelectorAll('.reveal');
+      revealEls.forEach(function(el){ el.style.transitionDelay = ((idx++%6)*60)+'ms'; });
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { rootMargin: '-10% 0px' });
+      revealEls.forEach(function(el){ io.observe(el); });
+
+      // FAQ accordions
+      document.querySelectorAll('[data-acc]').forEach(function(card){
+        var btn = card.querySelector('[data-acc-toggle]');
+        var content = card.querySelector('[data-acc-content]');
+        var icon = card.querySelector('[data-acc-icon]');
+        btn.addEventListener('click', function(){
+          var open = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!open));
+          content.style.maxHeight = open ? '0' : content.scrollHeight + 'px';
+          content.style.opacity = open ? '0' : '1';
+          if(icon){ icon.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)'; }
+        });
+      });
+
+      // Why toggle
+      var whyBtn = document.querySelector('[data-why-toggle]');
+      var whyContent = document.querySelector('[data-why-content]');
+      var whyIcon = document.querySelector('[data-why-icon]');
+      if(whyBtn && whyContent){
+        whyBtn.addEventListener('click', function(){
+          var expanded = whyBtn.getAttribute('aria-expanded') === 'true';
+          whyBtn.setAttribute('aria-expanded', String(!expanded));
+          whyContent.style.maxHeight = expanded ? '0' : '1000px';
+          whyContent.style.opacity = expanded ? '0' : '1';
+          if(whyIcon){ whyIcon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)'; }
+        });
+      }
+
+      // Contact form -> /api/lead (Airtable)
+      var form = document.getElementById('contactForm');
+      if(form){
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          var fd = new FormData(form);
+          if(fd.get('bot-field')) return; // honeypot
+          var payload = Object.fromEntries(fd.entries());
+          payload.ua = navigator.userAgent;
+          payload.referer = location.href;
+          fetch('/api/lead', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(payload) })
+          .then(function(r){ return r.json().then(function(data){ return { ok:r.ok, data:data }; }); })
+          .then(function(res){
+            document.getElementById('contactSuccess').classList.toggle('hidden', !res.ok);
+            document.getElementById('contactError').classList.toggle('hidden', res.ok);
+            if(res.ok) form.reset();
+          })
+          .catch(function(){
+            document.getElementById('contactSuccess').classList.add('hidden');
+            document.getElementById('contactError').classList.remove('hidden');
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
