@@ -1,21 +1,33 @@
-// /api/lead.js (Vercel Serverless Function – funguje i u “statické” stránky)
+// /api/lead.js — Vercel Serverless Function
+
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
+// Normalize helpers – snesou, když omylem zadáš "app.../shr..." nebo "app.../tbl..."
+const normalizeBaseId = (s) => (s || '').split('/')[0];
+const normalizeTable = (s) => {
+  if (!s) return 'Leads';
+  const parts = String(s).split('/');
+  return parts[parts.length - 1]; // vezme jen poslední segment (název tabulky nebo tbl...)
+};
+
 module.exports = async (req, res) => {
-  // CORS (když budeš odesílat ze stejné domény, je to v pohodě; tohle je jen pojistka)
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
+  }
 
   try {
     let body = req.body;
-    if (typeof body === 'string') body = JSON.parse(body);
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch { body = {}; }
+    }
 
-    // Basic anti-spam (honeypot jsme ve formuláři posílali prázdný; kdyby byl vyplněný, drop)
+    // Honeypot
     if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
 
     const fields = {
@@ -33,30 +45,51 @@ module.exports = async (req, res) => {
       Referer: body.referer || '',
       CreatedAt: new Date().toISOString(),
     };
-
-    // odstraníme undefined:
     Object.keys(fields).forEach((k) => fields[k] === undefined && delete fields[k]);
 
-    const r = await fetch(
-      AIRTABLE_URL(process.env.AIRTABLE_BASE_ID, process.env.AIRTABLE_TABLE_NAME || 'Leads'),
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json',
+    const baseId = normalizeBaseId(process.env.AIRTABLE_BASE_ID);
+    const table = normalizeTable(process.env.AIRTABLE_TABLE_NAME);
+    const key = process.env.AIRTABLE_API_KEY;
+
+    if (!baseId || !table || !key) {
+      return res.status(500).json({
+        ok: false,
+        error: 'ENV_MISSING',
+        missing: {
+          AIRTABLE_BASE_ID: !baseId,
+          AIRTABLE_TABLE_NAME: !table,
+          AIRTABLE_API_KEY: !key,
         },
-        body: JSON.stringify({ records: [{ fields }] }),
-      }
-    );
+      });
+    }
+
+    const r = await fetch(AIRTABLE_URL(baseId, table), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ records: [{ fields }] }),
+    });
 
     const data = await r.json();
+
     if (!r.ok) {
-      console.error('Airtable error', data);
-      return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', details: data });
+      // Užitečný hint do logu: 404 = špatný Base ID nebo Table Name/ID
+      return res.status(500).json({
+        ok: false,
+        error: 'AIRTABLE_ERROR',
+        status: r.status,
+        details: data,
+      });
     }
-    return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
-  } catch (e) {
-    console.error('Lead API error', e);
+
+    return res.status(200).json({
+      ok: true,
+      id: data.records?.[0]?.id || null,
+    });
+  } catch {
     return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
   }
 };
+
