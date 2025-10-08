@@ -1,19 +1,18 @@
 // /api/lead.js — Vercel Serverless Function (Airtable)
 // - CORS + OPTIONS
-// - Bez duplicit; jediný module.exports
 // - Neposílá prázdné hodnoty (hl. Date/Start/End)
-// - Start/End = Date + HH:MM (pokud je čas vyplněn)
-// - NIKDY neposílá CreatedAt (v Airtable je computed)
-// - Toleruje ENV ve tvaru "app.../tbl..." nebo "app.../shr..." (vezme jen první/poslední segment)
+// - Start/End = Date + HH:MM (pokud čas je)
+// - NIKDY neposílá CreatedAt (computed v Airtable)
+// - Název telefonního pole bere z ENV: AIRTABLE_PHONE_FIELD (fallback: "Phone")
 
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
-const normalizeBaseId = (s) => (s || '').split('/')[0]; // "appXXXX[/...]" -> "appXXXX"
+const normalizeBaseId = (s) => (s || '').split('/')[0];
 const normalizeTable = (s) => {
   if (!s) return 'Leads';
   const parts = String(s).split('/');
-  return parts[parts.length - 1]; // "Leads" nebo "tblXXXX"
+  return parts[parts.length - 1]; // table name nebo tbl...
 };
 
 function toAirtableDate(input) {
@@ -26,8 +25,8 @@ function toAirtableDate(input) {
     return `${yyyy}-${mm}-${dd}`;
   }
   const d = new Date(v);
-  if (!isNaN(d)) return d.toISOString().slice(0, 10);       // ISO date only
-  return undefined;                                         // neznámý formát -> neposílat
+  if (!isNaN(d)) return d.toISOString().slice(0, 10);
+  return undefined; // neznámý formát -> neposílat
 }
 
 function toHHMM(input) {
@@ -45,13 +44,12 @@ function toHHMM(input) {
 
 function combineDateTime(dateVal, timeVal) {
   const d = toAirtableDate(dateVal);
-  if (!d) return undefined;              // bez data neposílej (DateTime pole by spadlo)
+  if (!d) return undefined;   // bez data neposílat (Airtable DateTime by spadlo)
   const t = toHHMM(timeVal);
-  if (!t) return d;                      // jen datum (pro Date pole OK)
-  return `${d} ${t}`;                    // Airtable DateTime akceptuje "YYYY-MM-DD HH:MM"
+  if (!t) return d;           // jen datum (OK pro Date field)
+  return `${d} ${t}`;         // Airtable akceptuje "YYYY-MM-DD HH:MM"
 }
 
-// Přidá klíč pouze pokud má hodnotu (neprázdný string / validní hodnota)
 function addIfPresent(target, key, val) {
   if (val === undefined || val === null) return;
   if (typeof val === 'string' && val.trim() === '') return;
@@ -59,7 +57,6 @@ function addIfPresent(target, key, val) {
 }
 
 module.exports = async (req, res) => {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
@@ -69,25 +66,26 @@ module.exports = async (req, res) => {
 
   try {
     let body = req.body;
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch { body = {}; }
-    }
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
 
-    // Anti-spam honeypot
+    // Honeypot
     if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
 
-    // Jméno: preferuj `name`; pokud není, slož z `first_name` + `last_name`
+    // Name: preferuj `name`, jinak slož z first/last
     const first = (body.first_name || '').trim();
     const last  = (body.last_name  || '').trim();
     const name  = (body.name && String(body.name).trim())
       ? String(body.name).trim()
       : [first, last].filter(Boolean).join(' ');
 
-    // Sestavení fields — pouze hodnoty, které dávají smysl
     const fields = {};
     addIfPresent(fields, 'Name', name);
     addIfPresent(fields, 'Email', body.email);
-    addIfPresent(fields, 'Phone', (body.phone && String(body.phone).trim()) || undefined);
+
+    // Telefon — název pole z ENV (např. "Telefon"), fallback "Phone"
+    const phoneVal = (body.phone && String(body.phone).trim()) || undefined;
+    const phoneFieldName = (process.env.AIRTABLE_PHONE_FIELD || 'Phone').trim();
+    addIfPresent(fields, phoneFieldName, phoneVal);
 
     // Datum + časy
     const atDate = toAirtableDate(body.date);
@@ -96,10 +94,10 @@ module.exports = async (req, res) => {
     const startCombined = combineDateTime(body.date, body.start_time);
     if (startCombined) addIfPresent(fields, 'Start', startCombined);
 
-    const endCombined = combineDateTime(body.date, body.end_time);
-    if (endCombined) addIfPresent(fields, 'End', endCombined);
+    const endCombined   = combineDateTime(body.date, body.end_time);
+    if (endCombined)   addIfPresent(fields, 'End', endCombined);
 
-    // Další volitelná pole
+    // Další volitelné
     addIfPresent(fields, 'Venue', body.venue);
     addIfPresent(fields, 'Type', body.type);
 
@@ -110,7 +108,7 @@ module.exports = async (req, res) => {
     addIfPresent(fields, 'Note', body.note);
     addIfPresent(fields, 'UA', body.ua);
     addIfPresent(fields, 'Referer', body.referer);
-    // POZOR: CreatedAt NEPOSÍLÁME (Airtable "Created time" je computed)
+    // CreatedAt nikdy neposíláme (computed)
 
     // ENV
     const baseId = normalizeBaseId(process.env.AIRTABLE_BASE_ID);
@@ -141,18 +139,10 @@ module.exports = async (req, res) => {
 
     const data = await r.json();
     if (!r.ok) {
-      return res.status(500).json({
-        ok: false,
-        error: 'AIRTABLE_ERROR',
-        status: r.status,
-        details: data,
-      });
+      return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', status: r.status, details: data });
     }
 
-    return res.status(200).json({
-      ok: true,
-      id: data.records?.[0]?.id || null,
-    });
+    return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
   } catch {
     return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
   }
