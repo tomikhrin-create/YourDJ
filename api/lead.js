@@ -1,28 +1,23 @@
-// /api/lead.js — Vercel Serverless Function
-// Works for static sites too (just place this file in a top-level "api" folder)
-
+// /api/lead.js (Vercel Serverless Function – funguje i u “statické” stránky)
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
 module.exports = async (req, res) => {
-  // Basic CORS (safe for same-origin form posts as well)
+  // CORS (když budeš odesílat ze stejné domény, je to v pohodě; tohle je jen pojistka)
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     let body = req.body;
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch { body = {}; }
-    }
+    if (typeof body === 'string') body = JSON.parse(body);
 
-    // Honeypot — if robots fill this, we silently accept and skip
+    // Basic anti-spam (honeypot jsme ve formuláři posílali prázdný; kdyby byl vyplněný, drop)
     if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
 
-    // Map incoming form fields → Airtable columns
     const fields = {
       Name: body.name || '',
       Email: body.email || '',
@@ -39,40 +34,29 @@ module.exports = async (req, res) => {
       CreatedAt: new Date().toISOString(),
     };
 
-    // Remove undefined so Airtable doesn't reject the payload
+    // odstraníme undefined:
     Object.keys(fields).forEach((k) => fields[k] === undefined && delete fields[k]);
 
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const table = process.env.AIRTABLE_TABLE_NAME || 'Leads';
-    const key = process.env.AIRTABLE_API_KEY;
-
-    if (!baseId || !table || !key) {
-      return res.status(500).json({ ok: false, error: 'ENV_MISSING', missing: {
-        AIRTABLE_BASE_ID: !baseId,
-        AIRTABLE_TABLE_NAME: !table,
-        AIRTABLE_API_KEY: !key,
-      }});
-    }
-
-    const r = await fetch(AIRTABLE_URL(baseId, table), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ records: [{ fields }] }),
-    });
+    const r = await fetch(
+      AIRTABLE_URL(process.env.AIRTABLE_BASE_ID, process.env.AIRTABLE_TABLE_NAME || 'Leads'),
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ records: [{ fields }] }),
+      }
+    );
 
     const data = await r.json();
-
     if (!r.ok) {
-      // Surface Airtable error for easier debugging in Vercel Logs
+      console.error('Airtable error', data);
       return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', details: data });
     }
-
-    const id = data.records?.[0]?.id || null;
-    return res.status(200).json({ ok: true, id });
+    return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
   } catch (e) {
+    console.error('Lead API error', e);
     return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
   }
 };
