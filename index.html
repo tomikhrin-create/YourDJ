@@ -336,14 +336,34 @@
           </div>
           <form id="contactForm" class="space-y-4" autocomplete="on">
             <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true"/>
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div><label class="mb-1 block text-sm font-medium" for="name2">Jméno</label><input id="name2" name="name" required type="text" placeholder="Nevěsta / ženich" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
-              <div><label class="mb-1 block text-sm font-medium" for="email2">E‑mail</label><input id="email2" name="email" required type="email" placeholder="vas@email.cz" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/></div>
+           <div class="grid gap-4 sm:grid-cols-2">
+            <!-- Křestní jméno -->
+            <div>
+              <label class="mb-1 block text-sm font-medium" for="first_name">Křestní jméno</label>
+              <input id="first_name" name="first_name" required type="text" placeholder="Jana"
+                     class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
             </div>
-  <label class="mb-1 block text-sm font-medium" for="phone">Telefon</label>
-  <input id="phone" name="phone" type="tel" inputmode="tel"
-         placeholder="+420 777 123 456"
-         class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+          
+            <!-- Příjmení -->
+            <div>
+              <label class="mb-1 block text-sm font-medium" for="last_name">Příjmení</label>
+              <input id="last_name" name="last_name" required type="text" placeholder="Nováková"
+                     class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+            </div>
+          
+            <!-- E-mail -->
+            <div>
+              <label class="mb-1 block text-sm font-medium" for="email2">E-mail</label>
+              <input id="email2" name="email" required type="email" placeholder="vas@email.cz"
+                     class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+            </div>
+          
+            <!-- Telefon -->
+            <div>
+              <label class="mb-1 block text-sm font-medium" for="phone">Telefon</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+420 777 123 456"
+                     class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+            </div>
           </div>
             <div class="grid gap-4 sm:grid-cols-2">
               <div><label class="mb-1 block text-sm font-medium" for="date2">Datum akce</label><input id="date2" name="date" required type="date" class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/></div>
