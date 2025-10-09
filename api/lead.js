@@ -1,11 +1,11 @@
 // /api/lead.js — Vercel Serverless Function (Airtable)
 // - CORS + OPTIONS
-// - Normalizes Base ID and Table (supports app.../tbl...)
-// - Skips empty values
-// - Phone field name via ENV AIRTABLE_PHONE_FIELD (fallback "Phone")
-// - Date normalization (YYYY-MM-DD; supports DD.MM.YYYY)
+// - Normalizes Base ID and Table (supports app.../tbl... inputs)
+// - Skips empty values (esp. Date/Start/End)
+// - Phone column name via ENV AIRTABLE_PHONE_FIELD (fallback "Phone")
+// - Date normalization (YYYY-MM-DD; accepts DD.MM.YYYY)
 // - Start/End = "YYYY-MM-DD HH:MM" when time present; if no Date, Start/End not sent
-// - Never sends computed fields
+// - Never sends computed fields (e.g., CreatedAt)
 
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
@@ -87,7 +87,7 @@ module.exports = async (req, res) => {
     addIfPresent(fields, 'Name', name);
     addIfPresent(fields, 'Email', body.email);
 
-    // Phone — configurable via ENV to match your Airtable column (e.g., "Telefon")
+    // Phone — configurable via ENV (e.g., "Telefon")
     const phoneVal = (body.phone && String(body.phone).trim()) || undefined;
     const phoneFieldName = (process.env.AIRTABLE_PHONE_FIELD || 'Phone').trim();
     addIfPresent(fields, phoneFieldName, phoneVal);
