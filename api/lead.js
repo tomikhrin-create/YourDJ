@@ -1,237 +1,193 @@
-// /api/lead.js — Vercel Serverless Function (Airtable, fix Type + bez Attendees)
-// - Mapování názvů sloupců přes ENV (viz FIELDS)
-// - Neodesílá Attendees
-// - Normalizuje a mapuje "type" (Single select v Airtable) + strip uvozovek
-// - Odolné proti 422/500: posílá jen neprázdné hodnoty, validuje datum/čas
-// - Debug mód: /api/lead?debug=1 vrátí i payloadFields pro rychlé ladění
-// - CORS + OPTIONS
-
+// /api/lead.js — Airtable lead endpoint (fix Type+Source mapping, bez Attendees)
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
-// ---------- Field name mapping (override přes ENV) ----------
+// ----- Field name mapping (ENV overrides) -----
 const FIELDS = {
-  NAME:        process.env.AIRTABLE_NAME_FIELD        || 'Name',
-  EMAIL:       process.env.AIRTABLE_EMAIL_FIELD       || 'Email',
-  PHONE:       (process.env.AIRTABLE_PHONE_FIELD      || 'Phone').trim(),
-  DATE:        process.env.AIRTABLE_DATE_FIELD        || 'Date',
-  START:       process.env.AIRTABLE_START_FIELD       || 'Start',
-  END:         process.env.AIRTABLE_END_FIELD         || 'End',
-  VENUE:       process.env.AIRTABLE_VENUE_FIELD       || 'Venue',
-  TYPE:        process.env.AIRTABLE_TYPE_FIELD        || 'Type', // Single select nebo text
-  SOURCE:      process.env.AIRTABLE_SOURCE_FIELD      || 'Source',
-  NOTE:        process.env.AIRTABLE_NOTE_FIELD        || 'Note',
-  UA:          process.env.AIRTABLE_UA_FIELD          || 'UA',
-  REFERER:     process.env.AIRTABLE_REFERER_FIELD     || 'Referer',
+  NAME:     process.env.AIRTABLE_NAME_FIELD     || 'Name',
+  EMAIL:    process.env.AIRTABLE_EMAIL_FIELD    || 'Email',
+  PHONE:    (process.env.AIRTABLE_PHONE_FIELD   || 'Phone').trim(),
+  DATE:     process.env.AIRTABLE_DATE_FIELD     || 'Date',
+  START:    process.env.AIRTABLE_START_FIELD    || 'Start',
+  END:      process.env.AIRTABLE_END_FIELD      || 'End',
+  VENUE:    process.env.AIRTABLE_VENUE_FIELD    || 'Venue',
+  TYPE:     process.env.AIRTABLE_TYPE_FIELD     || 'Type',     // Single select
+  SOURCE:   process.env.AIRTABLE_SOURCE_FIELD   || 'Source',   // Single select
+  NOTE:     process.env.AIRTABLE_NOTE_FIELD     || 'Note',
+  UA:       process.env.AIRTABLE_UA_FIELD       || 'UA',
+  REFERER:  process.env.AIRTABLE_REFERER_FIELD  || 'Referer',
 };
 
-// ---------- MAPA pro Single select "Type" v Airtablu ----------
-// !!! Uprav tak, aby tyto hodnoty přesně odpovídaly LABELŮM v Airtablu (včetně diakritiky a mezer) !!!
+// ----- Přesné labely podle Airtablu (vč. koncových mezer) -----
+// Viz screenshot: Type má „Svatební Den “ atd., Source má „Výstava “ s mezerou.
 const TYPE_LABELS = {
-  'svatebni-den':    'Svatební den',
-  'firemni-vecirek': 'Firemní večírek',
-  'narozeniny':      'Narozeniny',
-  'konference':      'Konference',
-  'verejna-akce':    'Veřejná akce',
+  'svatebni-den':    'Svatební Den ',
+  'firemni-vecirek': 'Firemní Večírek ',
+  'narozeniny':      'Narozeniny ',
+  'konference':      'Konference ',
+  'verejna-akce':    'Veřejná Akce ',
 };
-// Pokud nechceš mapovat, ale posílat přesně to, co přijde, přepni na false (a mít v Airtablu textové pole).
+
+// Pokud HTML už posílá přesný label (včetně mezery), projde to i bez mapy.
+// Ale ponecháváme whitelist = true, aby se nic „mimo“ neposlalo:
 const ENFORCE_TYPE_WHITELIST = true;
 
-// ---------- helpers ----------
+// Source možnosti (včetně přesné diakritiky a mezery u „Výstava “)
+const SOURCE_LABELS = {
+  'facebook':    'Facebook',
+  'instagram':   'Instagram',
+  'linkenid':    'LinkenID',
+  'vystava':     'Výstava ',
+  'výstava':     'Výstava ',
+  'doporučení':  'Doporučení',
+  'doporučeni':  'Doporučení',
+  'google':      'Google',
+};
+const ENFORCE_SOURCE_WHITELIST = true;
+
+// ----- helpers -----
 function addIfPresent(target, key, val) {
   if (val === undefined || val === null) return;
   if (typeof val === 'string' && val.trim() === '') return;
   target[key] = val;
 }
-
 function toAirtableDate(input) {
   if (!input) return undefined;
   const v = String(input).trim();
   if (!v) return undefined;
-
-  // YYYY-MM-DD
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-
-  // DD.MM.YYYY -> YYYY-MM-DD
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v; // YYYY-MM-DD
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {        // DD.MM.YYYY
     const [dd, mm, yyyy] = v.split('.');
     return `${yyyy}-${mm}-${dd}`;
   }
-
-  // Fallback: Date parse
   const d = new Date(v);
   if (!isNaN(d)) return d.toISOString().slice(0, 10);
   return undefined;
 }
-
-// přijme "HH:MM" i "HH:MM:SS" a vrátí "HH:MM"
 function toHHMM(input) {
   if (!input) return undefined;
   let v = String(input).trim();
-
-  // HH:MM:SS -> usekni sekundy
-  const secMatch = v.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-  if (secMatch) v = `${secMatch[1]}:${secMatch[2]}`;
-
+  const sec = v.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+  if (sec) v = `${sec[1]}:${sec[2]}`;
   const m = v.match(/^(\d{1,2}):(\d{2})$/);
   if (!m) return undefined;
-  const h = Number(m[1]);
-  const min = Number(m[2]);
-
-  // 00:00..23:59
-  if (Number.isNaN(h) || Number.isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return undefined;
-  return `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+  const h = +m[1], min = +m[2];
+  if (h<0||h>23||min<0||min>59||Number.isNaN(h)||Number.isNaN(min)) return undefined;
+  return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
 }
-
-// Pomocné — sundá okolní uvozovky a ořízne mezery
+function composeDateOrDateTime(dateVal, timeVal, dateOnly) {
+  const d = toAirtableDate(dateVal);
+  if (!d) return undefined;
+  if (dateOnly) return d;
+  const t = toHHMM(timeVal);
+  return t ? `${d} ${t}` : d;
+}
 function stripQuotes(s) {
   const v = (s || '').toString().trim();
   if (!v) return '';
-  const first = v[0], last = v[v.length - 1];
-  if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
-    return v.slice(1, -1).trim();
-  }
+  const q1=v[0], q2=v[v.length-1];
+  if ((q1==='"'&&q2==='"') || (q1==="'"&&q2==="'" )) return v.slice(1,-1).trim();
   return v;
 }
-
-// Normalizace "Type" (Single select)
-function normalizeType(raw) {
-  const incoming = stripQuotes(raw);              // např. ""svatebni-den"" -> svatebni-den
+function slugifyLower(s) {
+  return (s||'')
+    .toString()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g,'') // pryč diakritika
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+function normalizeSelectValue(raw, whitelistMap, enforce=true) {
+  const incoming = stripQuotes(raw);
   if (!incoming) return undefined;
 
-  // 1) Pokud už posíláš rovnou správný label (např. "Svatební den"), nech beze změny:
-  // (Pozn.: tady nepřevádím case; Single select v Airtable je citlivý na přesné znění.)
-  const allLabels = Object.values(TYPE_LABELS);
-  if (allLabels.includes(incoming)) return incoming;
+  // 1) pokud už je to přesný label (včetně koncové mezery), vrať rovnou
+  const exactLabels = new Set(Object.values(whitelistMap));
+  if (exactLabels.has(incoming)) return incoming;
 
-  // 2) Jinak zkus mapu (slug -> label)
-  if (ENFORCE_TYPE_WHITELIST) {
-    const mapped = TYPE_LABELS[incoming];
-    return mapped || undefined; // když není ve whitelistu, neposílej nic (vyhneš se 422)
-  }
-  // 3) Bez whitelistu pošli, co přišlo (vhodné, pokud je "Type" textové pole)
-  return incoming;
-}
+  // 2) zkuste mapu přes slug
+  const k = slugifyLower(incoming);
+  const mapped = whitelistMap[k];
 
-// dateOnly=true → jen YYYY-MM-DD; jinak YYYY-MM-DD HH:MM (když je čas)
-function composeDateOrDateTime(dateVal, timeVal, dateOnly) {
-  const d = toAirtableDate(dateVal);
-  if (!d) return undefined; // bez data neposílej Start/End vůbec
-  if (dateOnly) return d;   // sloupec v Airtable je Date (bez času)
-  const t = toHHMM(timeVal);
-  if (!t) return d;         // není čas → pošli jen datum
-  return `${d} ${t}`;       // DateTime
+  if (enforce) return mapped || undefined; // bez validní hodnoty nic neposílej
+  return mapped || incoming; // fallback: co přišlo
 }
 
 module.exports = async (req, res) => {
-  // --- CORS ---
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
-
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
+  if (req.method !== 'POST') return res.status(405).json({ ok:false, error:'METHOD_NOT_ALLOWED' });
 
   try {
     let body = req.body;
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch { body = {}; }
-    }
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
     body = body || {};
 
-    // Honeypot
-    if (body['bot-field']) {
-      return res.status(200).json({ ok: true, skipped: true });
-    }
+    // honeypot
+    if (body['bot-field']) return res.status(200).json({ ok:true, skipped:true });
 
-    // Sestav Name (preferuj 'name', jinak slož z first/last)
+    // Name
     const first = (body.first_name || '').trim();
     const last  = (body.last_name  || '').trim();
-    const name  = (body.name && String(body.name).trim())
-      ? String(body.name).trim()
-      : [first, last].filter(Boolean).join(' ');
+    const name  = (body.name && String(body.name).trim()) ? String(body.name).trim() : [first,last].filter(Boolean).join(' ');
 
-    // Datum/čas – respektuj date-only přepínače
+    // Date/Time (Date-only přepínače)
     const atDate = toAirtableDate(body.date);
-    const startDateOnly = String(process.env.AIRTABLE_START_IS_DATE_ONLY || '').trim() === '1';
-    const endDateOnly   = String(process.env.AIRTABLE_END_IS_DATE_ONLY   || '').trim() === '1';
-
+    const startDateOnly = String(process.env.AIRTABLE_START_IS_DATE_ONLY||'').trim()==='1';
+    const endDateOnly   = String(process.env.AIRTABLE_END_IS_DATE_ONLY  ||'').trim()==='1';
     const startVal = composeDateOrDateTime(body.date, body.start_time, startDateOnly);
     const endVal   = composeDateOrDateTime(body.date, body.end_time,   endDateOnly);
 
-    // Normalizace type (Single select)
-    const typeVal = normalizeType(body.type);
+    // Normalizace Single selectů
+    const typeVal   = normalizeSelectValue(body.type,   TYPE_LABELS,   ENFORCE_TYPE_WHITELIST);
+    const sourceVal = normalizeSelectValue(body.source, SOURCE_LABELS, ENFORCE_SOURCE_WHITELIST);
 
-    // Skládání fields (posílej jen neprázdné)
+    // Poskládání fields
     const fields = {};
     addIfPresent(fields, FIELDS.NAME,    name);
     addIfPresent(fields, FIELDS.EMAIL,   body.email && String(body.email).trim() || undefined);
     addIfPresent(fields, FIELDS.PHONE,   body.phone && String(body.phone).trim() || undefined);
-
     addIfPresent(fields, FIELDS.DATE,    atDate);
     addIfPresent(fields, FIELDS.START,   startVal);
     addIfPresent(fields, FIELDS.END,     endVal);
-
     addIfPresent(fields, FIELDS.VENUE,   body.venue);
-    addIfPresent(fields, FIELDS.TYPE,    typeVal);   // ← sem posíláme už přemapovaný (nebo nic)
-
-    addIfPresent(fields, FIELDS.SOURCE,  body.source);
+    addIfPresent(fields, FIELDS.TYPE,    typeVal);
+    addIfPresent(fields, FIELDS.SOURCE,  sourceVal);
     addIfPresent(fields, FIELDS.NOTE,    body.note);
     addIfPresent(fields, FIELDS.UA,      body.ua);
     addIfPresent(fields, FIELDS.REFERER, body.referer);
 
     // ENV
-    const baseId = (process.env.AIRTABLE_BASE_ID || '').split('/')[0];            // "appXXXX"
-    const table  = (process.env.AIRTABLE_TABLE_NAME || 'Leads').split('/').pop(); // "Leads" nebo "tblXXXX"
+    const baseId = (process.env.AIRTABLE_BASE_ID || '').split('/')[0];
+    const table  = (process.env.AIRTABLE_TABLE_NAME || 'Leads').split('/').pop();
     const key    = process.env.AIRTABLE_API_KEY;
-
     if (!baseId || !table || !key) {
-      return res.status(500).json({
-        ok: false,
-        error: 'ENV_MISSING',
-        missing: {
-          AIRTABLE_BASE_ID:    !baseId,
-          AIRTABLE_TABLE_NAME: !table,
-          AIRTABLE_API_KEY:    !key,
-        }
-      });
+      return res.status(500).json({ ok:false, error:'ENV_MISSING', missing:{
+        AIRTABLE_BASE_ID:!baseId, AIRTABLE_TABLE_NAME:!table, AIRTABLE_API_KEY:!key
+      }});
     }
 
-    // Odeslání do Airtable
+    // POST do Airtable
     const r = await fetch(AIRTABLE_URL(baseId, table), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ records: [{ fields }] }),
+      method:'POST',
+      headers:{ Authorization:`Bearer ${key}`, 'Content-Type':'application/json' },
+      body: JSON.stringify({ records:[{ fields }] }),
     });
-
     const data = await r.json();
-
-    // Debug mód: vrátíme i payloadFields
-    const isDebug = typeof req.url === 'string' && req.url.includes('debug=1');
+    const debug = typeof req.url==='string' && req.url.includes('debug=1');
 
     if (!r.ok) {
-      // zaloguj do Vercel logs
-      console.error('AIRTABLE_ERROR', { status: r.status, details: data, payloadFields: fields });
-      return res.status(500).json({
-        ok: false,
-        error: 'AIRTABLE_ERROR',
-        status: r.status,
-        details: data,
-        ...(isDebug ? { payloadFields: fields } : {})
-      });
+      console.error('AIRTABLE_ERROR', { status:r.status, details:data, payloadFields:fields });
+      return res.status(500).json({ ok:false, error:'AIRTABLE_ERROR', status:r.status, details:data, ...(debug?{payloadFields:fields}:{}) });
     }
-
-    return res.status(200).json({
-      ok: true,
-      id: data.records?.[0]?.id || null,
-      ...(isDebug ? { payloadFields: fields } : {})
-    });
+    return res.status(200).json({ ok:true, id: data.records?.[0]?.id || null, ...(debug?{payloadFields:fields}:{}) });
   } catch (e) {
     console.error('SERVER_ERROR', e);
-    return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
+    return res.status(500).json({ ok:false, error:'SERVER_ERROR' });
   }
 };
