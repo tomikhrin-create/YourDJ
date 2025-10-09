@@ -1,61 +1,47 @@
-// /api/lead.js — Vercel Serverless Function (Airtable)
-// - CORS + OPTIONS
-// - Normalizes Base ID and Table (supports app.../tbl... inputs)
-// - Skips empty values (esp. Date/Start/End)
-// - Phone column name via ENV AIRTABLE_PHONE_FIELD (fallback "Phone")
-// - Date normalization (YYYY-MM-DD; accepts DD.MM.YYYY)
-// - Start/End = "YYYY-MM-DD HH:MM" when time present; if no Date, Start/End not sent
-// - Never sends computed fields (e.g., CreatedAt)
+// /api/lead.js — Vercel Serverless Function
+// Fix 422 for Start/End: always send Date+Time ("YYYY-MM-DD HH:MM") or skip when Date missing.
 
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
-const normalizeBaseId = (s) => (s || '').split('/')[0];      // "appXXXX[/...]" -> "appXXXX"
-const normalizeTable  = (s) => {
-  if (!s) return 'Leads';
-  const parts = String(s).split('/');
-  return parts[parts.length - 1];                             // "Leads" or "tblXXXX"
-};
-
+// --- helpers ---
 function toAirtableDate(input) {
   if (!input) return undefined;
   const v = String(input).trim();
   if (!v) return undefined;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;                // YYYY-MM-DD
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {                      // DD.MM.YYYY -> YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;           // YYYY-MM-DD
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {                  // DD.MM.YYYY -> YYYY-MM-DD
     const [dd, mm, yyyy] = v.split('.');
     return `${yyyy}-${mm}-${dd}`;
   }
   const d = new Date(v);
   if (!isNaN(d)) return d.toISOString().slice(0, 10);
-  return undefined;                                           // unknown format -> don't send
+  return undefined;                                       // unknown format -> don't send
 }
 
 function toHHMM(input) {
   if (!input) return undefined;
   const v = String(input).trim();
-  if (!v) return undefined;
   const m = v.match(/^(\d{1,2}):(\d{2})$/);
   if (!m) return undefined;
-  const h = Number(m[1]), min = Number(m[2]);
+  const h = Number(m[1]);
+  const min = Number(m[2]);
   if (Number.isNaN(h) || Number.isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return undefined;
-  const hh = h < 10 ? `0${h}` : String(h);
-  const mm = min < 10 ? `0${min}` : String(min);
-  return `${hh}:${mm}`;
+  return `${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;
 }
 
 function combineDateTime(dateVal, timeVal) {
   const d = toAirtableDate(dateVal);
-  if (!d) return undefined;                                   // no Date => don't send Start/End
+  if (!d) return undefined;       // no Date => don't send Start/End
   const t = toHHMM(timeVal);
-  if (!t) return d;                                           // only Date
-  return `${d} ${t}`;                                         // Airtable accepts "YYYY-MM-DD HH:MM"
+  if (!t) return d;               // only Date (OK for Date field)
+  return `${d} ${t}`;             // DateTime field expects "YYYY-MM-DD HH:MM"
 }
 
-function addIfPresent(target, key, val) {
+function addIfPresent(obj, key, val) {
   if (val === undefined || val === null) return;
   if (typeof val === 'string' && val.trim() === '') return;
-  target[key] = val;
+  obj[key] = val;
 }
 
 module.exports = async (req, res) => {
@@ -73,26 +59,27 @@ module.exports = async (req, res) => {
       try { body = JSON.parse(body); } catch { body = {}; }
     }
 
-    // Honeypot
+    // Honeypot (spam)
     if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
 
-    // Prefer explicit name, otherwise build from first/last
+    // Name: prefer body.name, otherwise compose from first/last
     const first = (body.first_name || '').trim();
     const last  = (body.last_name  || '').trim();
     const name  = (body.name && String(body.name).trim())
       ? String(body.name).trim()
       : [first, last].filter(Boolean).join(' ');
 
+    // Build Airtable fields (skip empties)
     const fields = {};
     addIfPresent(fields, 'Name', name);
     addIfPresent(fields, 'Email', body.email);
 
-    // Phone — configurable via ENV (e.g., "Telefon")
-    const phoneVal = (body.phone && String(body.phone).trim()) || undefined;
+    // Phone column name can be customized via ENV (e.g., "Telefon")
     const phoneFieldName = (process.env.AIRTABLE_PHONE_FIELD || 'Phone').trim();
+    const phoneVal = (body.phone && String(body.phone).trim()) || undefined;
     addIfPresent(fields, phoneFieldName, phoneVal);
 
-    // Date / Start / End
+    // Date + Start/End (robust)
     const atDate = toAirtableDate(body.date);
     if (atDate) addIfPresent(fields, 'Date', atDate);
 
@@ -113,28 +100,39 @@ module.exports = async (req, res) => {
     addIfPresent(fields, 'Note', body.note);
     addIfPresent(fields, 'UA', body.ua);
     addIfPresent(fields, 'Referer', body.referer);
-    // Never send computed fields like CreatedAt
 
-    // ENV (normalized)
-    const baseId = normalizeBaseId(process.env.AIRTABLE_BASE_ID);
-    const table  = normalizeTable(process.env.AIRTABLE_TABLE_NAME);
+    // Clean undefined again (safety)
+    Object.keys(fields).forEach((k) => fields[k] === undefined && delete fields[k]);
+
+    // ENV (normalize)
+    const baseId = (process.env.AIRTABLE_BASE_ID || '').split('/')[0];            // "appXXXX"
+    const table  = (process.env.AIRTABLE_TABLE_NAME || 'Leads').split('/').pop(); // "Leads" or "tblXXXX"
     const key    = process.env.AIRTABLE_API_KEY;
 
     if (!baseId || !table || !key) {
-      return res.status(500).json({ ok: false, error: 'ENV_MISSING', missing: {
-        AIRTABLE_BASE_ID: !baseId,
-        AIRTABLE_TABLE_NAME: !table,
-        AIRTABLE_API_KEY: !key,
-      }});
+      return res.status(500).json({
+        ok: false,
+        error: 'ENV_MISSING',
+        missing: {
+          AIRTABLE_BASE_ID: !baseId,
+          AIRTABLE_TABLE_NAME: !table,
+          AIRTABLE_API_KEY: !key,
+        }
+      });
     }
 
+    // Send to Airtable
     const r = await fetch(AIRTABLE_URL(baseId, table), {
       method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ records: [{ fields }] }),
     });
 
     const data = await r.json();
+
     if (!r.ok) {
       return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', status: r.status, details: data });
     }
