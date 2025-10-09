@@ -1,0 +1,65 @@
+<!-- =====================================
+FILE 1: /dekujeme/index.html
+===================================== -->
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Děkujeme za poptávku | YourDJs</title>
+<meta name="description" content="Děkujeme za zprávu. Ozveme se do 24 hodin s nabídkou na míru."/>
+<link rel="canonical" href="https://yourdjs.cz/dekujeme/"/>
+
+<!-- OG/Twitter -->
+<meta property="og:title" content="Děkujeme za poptávku | YourDJs"/>
+<meta property="og:description" content="Ozveme se do 24 hodin s nabídkou na míru."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://yourdjs.cz/dekujeme/"/>
+<meta property="og:image" content="https://yourdjs.cz/assets/og-1200x630.jpg"/>
+<meta property="og:locale" content="cs_CZ"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Děkujeme za poptávku | YourDJs"/>
+<meta name="twitter:description" content="Ozveme se do 24 hodin s nabídkou na míru."/>
+<meta name="twitter:image" content="https://yourdjs.cz/assets/og-1200x630.jpg"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body class="min-h-screen bg-black text-white">
+<header class="border-b border-white/10">
+<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<a href="/" class="text-lg font-extrabold tracking-tight">YourDJs<span class="text-amber-600"> · DJ</span></a>
+<a href="/" class="rounded-2xl border border-white/20 px-4 py-2 hover:border-white/40">Zpět na web</a>
+</div>
+</header>
+
+<main class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 text-center">
+<div class="reveal">
+<h1 class="text-3xl sm:text-4xl font-extrabold">Děkujeme za vaši poptávku 🎉</h1>
+<p class="mt-3 text-white/80">Ozvu se nejpozději do 24 hodin s nabídkou na míru. Pokud je to urgentní, napište klidně rovnou na <a class="underline decoration-amber-500/60 hover:decoration-amber-500" href="mailto:tomikhrin@gmail.com">tomikhrin@gmail.com</a> nebo volejte <a class="underline decoration-amber-500/60 hover:decoration-amber-500" href="tel:+420732585550">+420&nbsp;732&nbsp;585&nbsp;550</a>.</p>
+<div class="mt-8 inline-flex items-center gap-3">
+<a href="/" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black">Zpět na hlavní stránku</a>
+<a href="/svatebni-dj-ostrava/" class="rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:border-white/40">Svatební DJ Ostrava</a>
+</div>
+<p class="mt-6 text-sm text-white/60">Za <span id="count">8</span>&nbsp;s vás přesměruji domů…</p>
+</div>
+</main>
+
+<footer class="border-t border-white/10 py-8 text-center text-sm text-white/60">
+<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">© <span id="year"></span> YourDJs™</div>
+</footer>
+
+<script>
+// malé UX: reveal + automatický návrat po 8s
+(function(){
+document.getElementById('year').textContent = new Date().getFullYear();
+const el=document.querySelector('.reveal'); requestAnimationFrame(()=>el.classList.add('in'));
+var n=8, span=document.getElementById('count');
+var t=setInterval(function(){ n--; span.textContent=n; if(n<=0){ clearInterval(t); window.location.href='/' } },1000);
+})();
+</script>
+</body>
+</html>
