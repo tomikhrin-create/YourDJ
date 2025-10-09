@@ -1,7 +1,9 @@
-// /api/lead.js — Vercel Serverless Function (Airtable, verze bez Attendees)
+// /api/lead.js — Vercel Serverless Function (Airtable, fix Type + bez Attendees)
 // - Mapování názvů sloupců přes ENV (viz FIELDS)
+// - Neodesílá Attendees
+// - Normalizuje a mapuje "type" (Single select v Airtable) + strip uvozovek
 // - Odolné proti 422/500: posílá jen neprázdné hodnoty, validuje datum/čas
-// - Podpora Date-only sloupců pro Start/End přes ENV přepínače
+// - Debug mód: /api/lead?debug=1 vrátí i payloadFields pro rychlé ladění
 // - CORS + OPTIONS
 
 const AIRTABLE_URL = (base, table) =>
@@ -16,22 +18,24 @@ const FIELDS = {
   START:       process.env.AIRTABLE_START_FIELD       || 'Start',
   END:         process.env.AIRTABLE_END_FIELD         || 'End',
   VENUE:       process.env.AIRTABLE_VENUE_FIELD       || 'Venue',
-  TYPE:        process.env.AIRTABLE_TYPE_FIELD        || 'Type', // ← text/select pole (ne Attachment)
+  TYPE:        process.env.AIRTABLE_TYPE_FIELD        || 'Type', // Single select nebo text
   SOURCE:      process.env.AIRTABLE_SOURCE_FIELD      || 'Source',
   NOTE:        process.env.AIRTABLE_NOTE_FIELD        || 'Note',
   UA:          process.env.AIRTABLE_UA_FIELD          || 'UA',
   REFERER:     process.env.AIRTABLE_REFERER_FIELD     || 'Referer',
 };
 
-// ---------- Volitelný whitelist pro TYPE (vypnuto) ----------
+// ---------- MAPA pro Single select "Type" v Airtablu ----------
+// !!! Uprav tak, aby tyto hodnoty přesně odpovídaly LABELŮM v Airtablu (včetně diakritiky a mezer) !!!
 const TYPE_LABELS = {
-  'svatebni-den': 'svatebni-den',
-  'firemni-vecirek': 'firemni-vecirek',
-  'narozeniny': 'narozeniny',
-  'konference': 'konference',
-  'verejna-akce': 'verejna-akce',
+  'svatebni-den':    'Svatební den',
+  'firemni-vecirek': 'Firemní večírek',
+  'narozeniny':      'Narozeniny',
+  'konference':      'Konference',
+  'verejna-akce':    'Veřejná akce',
 };
-const ENFORCE_TYPE_WHITELIST = false;
+// Pokud nechceš mapovat, ale posílat přesně to, co přijde, přepni na false (a mít v Airtablu textové pole).
+const ENFORCE_TYPE_WHITELIST = true;
 
 // ---------- helpers ----------
 function addIfPresent(target, key, val) {
@@ -79,6 +83,36 @@ function toHHMM(input) {
   return `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
 }
 
+// Pomocné — sundá okolní uvozovky a ořízne mezery
+function stripQuotes(s) {
+  const v = (s || '').toString().trim();
+  if (!v) return '';
+  const first = v[0], last = v[v.length - 1];
+  if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+    return v.slice(1, -1).trim();
+  }
+  return v;
+}
+
+// Normalizace "Type" (Single select)
+function normalizeType(raw) {
+  const incoming = stripQuotes(raw);              // např. ""svatebni-den"" -> svatebni-den
+  if (!incoming) return undefined;
+
+  // 1) Pokud už posíláš rovnou správný label (např. "Svatební den"), nech beze změny:
+  // (Pozn.: tady nepřevádím case; Single select v Airtable je citlivý na přesné znění.)
+  const allLabels = Object.values(TYPE_LABELS);
+  if (allLabels.includes(incoming)) return incoming;
+
+  // 2) Jinak zkus mapu (slug -> label)
+  if (ENFORCE_TYPE_WHITELIST) {
+    const mapped = TYPE_LABELS[incoming];
+    return mapped || undefined; // když není ve whitelistu, neposílej nic (vyhneš se 422)
+  }
+  // 3) Bez whitelistu pošli, co přišlo (vhodné, pokud je "Type" textové pole)
+  return incoming;
+}
+
 // dateOnly=true → jen YYYY-MM-DD; jinak YYYY-MM-DD HH:MM (když je čas)
 function composeDateOrDateTime(dateVal, timeVal, dateOnly) {
   const d = toAirtableDate(dateVal);
@@ -87,13 +121,6 @@ function composeDateOrDateTime(dateVal, timeVal, dateOnly) {
   const t = toHHMM(timeVal);
   if (!t) return d;         // není čas → pošli jen datum
   return `${d} ${t}`;       // DateTime
-}
-
-function normalizeType(raw) {
-  const v = (raw || '').toString().trim();
-  if (!v) return undefined;
-  if (!ENFORCE_TYPE_WHITELIST) return v;
-  return TYPE_LABELS[v] || undefined;
 }
 
 module.exports = async (req, res) => {
@@ -133,7 +160,7 @@ module.exports = async (req, res) => {
     const startVal = composeDateOrDateTime(body.date, body.start_time, startDateOnly);
     const endVal   = composeDateOrDateTime(body.date, body.end_time,   endDateOnly);
 
-    // Normalizace type
+    // Normalizace type (Single select)
     const typeVal = normalizeType(body.type);
 
     // Skládání fields (posílej jen neprázdné)
@@ -147,7 +174,7 @@ module.exports = async (req, res) => {
     addIfPresent(fields, FIELDS.END,     endVal);
 
     addIfPresent(fields, FIELDS.VENUE,   body.venue);
-    addIfPresent(fields, FIELDS.TYPE,    typeVal);
+    addIfPresent(fields, FIELDS.TYPE,    typeVal);   // ← sem posíláme už přemapovaný (nebo nic)
 
     addIfPresent(fields, FIELDS.SOURCE,  body.source);
     addIfPresent(fields, FIELDS.NOTE,    body.note);
@@ -183,12 +210,26 @@ module.exports = async (req, res) => {
 
     const data = await r.json();
 
+    // Debug mód: vrátíme i payloadFields
+    const isDebug = typeof req.url === 'string' && req.url.includes('debug=1');
+
     if (!r.ok) {
+      // zaloguj do Vercel logs
       console.error('AIRTABLE_ERROR', { status: r.status, details: data, payloadFields: fields });
-      return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', status: r.status, details: data });
+      return res.status(500).json({
+        ok: false,
+        error: 'AIRTABLE_ERROR',
+        status: r.status,
+        details: data,
+        ...(isDebug ? { payloadFields: fields } : {})
+      });
     }
 
-    return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
+    return res.status(200).json({
+      ok: true,
+      id: data.records?.[0]?.id || null,
+      ...(isDebug ? { payloadFields: fields } : {})
+    });
   } catch (e) {
     console.error('SERVER_ERROR', e);
     return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
