@@ -1,8 +1,7 @@
-// /api/lead.js — Vercel Serverless Function (Airtable, robustní verze)
+// /api/lead.js — Vercel Serverless Function (Airtable, verze bez Attendees)
 // - Mapování názvů sloupců přes ENV (viz FIELDS)
 // - Odolné proti 422/500: posílá jen neprázdné hodnoty, validuje datum/čas
 // - Podpora Date-only sloupců pro Start/End přes ENV přepínače
-// - Normalizace "type" (volitelné) + whitelist (volitelné, viz TYPE_LABELS)
 // - CORS + OPTIONS
 
 const AIRTABLE_URL = (base, table) =>
@@ -12,20 +11,19 @@ const AIRTABLE_URL = (base, table) =>
 const FIELDS = {
   NAME:        process.env.AIRTABLE_NAME_FIELD        || 'Name',
   EMAIL:       process.env.AIRTABLE_EMAIL_FIELD       || 'Email',
-  PHONE:       (process.env.AIRTABLE_PHONE_FIELD      || 'Phone').trim(), // držíme kompatibilitu s pův. proměnnou
+  PHONE:       (process.env.AIRTABLE_PHONE_FIELD      || 'Phone').trim(),
   DATE:        process.env.AIRTABLE_DATE_FIELD        || 'Date',
   START:       process.env.AIRTABLE_START_FIELD       || 'Start',
   END:         process.env.AIRTABLE_END_FIELD         || 'End',
   VENUE:       process.env.AIRTABLE_VENUE_FIELD       || 'Venue',
-  TYPE:        process.env.AIRTABLE_TYPE_FIELD        || 'Type', // ← přesměruj na text/select pole (např. EventType)
-  ATTENDEES:   process.env.AIRTABLE_ATTENDEES_FIELD   || 'Attendees',
+  TYPE:        process.env.AIRTABLE_TYPE_FIELD        || 'Type', // ← text/select pole (ne Attachment)
   SOURCE:      process.env.AIRTABLE_SOURCE_FIELD      || 'Source',
   NOTE:        process.env.AIRTABLE_NOTE_FIELD        || 'Note',
   UA:          process.env.AIRTABLE_UA_FIELD          || 'UA',
   REFERER:     process.env.AIRTABLE_REFERER_FIELD     || 'Referer',
 };
 
-// ---------- Volitelný mapping/whitelist pro TYPE ----------
+// ---------- Volitelný whitelist pro TYPE (vypnuto) ----------
 const TYPE_LABELS = {
   'svatebni-den': 'svatebni-den',
   'firemni-vecirek': 'firemni-vecirek',
@@ -33,7 +31,6 @@ const TYPE_LABELS = {
   'konference': 'konference',
   'verejna-akce': 'verejna-akce',
 };
-// když je whitelist zapnutý, pošleme jen hodnotu ze seznamu (jinak undefined)
 const ENFORCE_TYPE_WHITELIST = false;
 
 // ---------- helpers ----------
@@ -57,10 +54,10 @@ function toAirtableDate(input) {
     return `${yyyy}-${mm}-${dd}`;
   }
 
-  // Fallback: Date parse (poslední možnost)
+  // Fallback: Date parse
   const d = new Date(v);
   if (!isNaN(d)) return d.toISOString().slice(0, 10);
-  return undefined; // neznámý formát -> neposílat
+  return undefined;
 }
 
 // přijme "HH:MM" i "HH:MM:SS" a vrátí "HH:MM"
@@ -77,7 +74,7 @@ function toHHMM(input) {
   const h = Number(m[1]);
   const min = Number(m[2]);
 
-  // Airtable nebere 24:00, jen 00:00..23:59
+  // 00:00..23:59
   if (Number.isNaN(h) || Number.isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return undefined;
   return `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
 }
@@ -141,21 +138,16 @@ module.exports = async (req, res) => {
 
     // Skládání fields (posílej jen neprázdné)
     const fields = {};
-    addIfPresent(fields, FIELDS.NAME, name);
-    addIfPresent(fields, FIELDS.EMAIL, body.email && String(body.email).trim() || undefined);
-    addIfPresent(fields, FIELDS.PHONE, body.phone && String(body.phone).trim() || undefined);
+    addIfPresent(fields, FIELDS.NAME,    name);
+    addIfPresent(fields, FIELDS.EMAIL,   body.email && String(body.email).trim() || undefined);
+    addIfPresent(fields, FIELDS.PHONE,   body.phone && String(body.phone).trim() || undefined);
 
-    addIfPresent(fields, FIELDS.DATE, atDate);
-    addIfPresent(fields, FIELDS.START, startVal);
-    addIfPresent(fields, FIELDS.END,   endVal);
+    addIfPresent(fields, FIELDS.DATE,    atDate);
+    addIfPresent(fields, FIELDS.START,   startVal);
+    addIfPresent(fields, FIELDS.END,     endVal);
 
-    addIfPresent(fields, FIELDS.VENUE, body.venue);
-    addIfPresent(fields, FIELDS.TYPE,  typeVal);
-
-    const attendees = body.attendees ? Number(body.attendees) : undefined;
-    if (attendees !== undefined && !Number.isNaN(attendees)) {
-      addIfPresent(fields, FIELDS.ATTENDEES, attendees);
-    }
+    addIfPresent(fields, FIELDS.VENUE,   body.venue);
+    addIfPresent(fields, FIELDS.TYPE,    typeVal);
 
     addIfPresent(fields, FIELDS.SOURCE,  body.source);
     addIfPresent(fields, FIELDS.NOTE,    body.note);
@@ -172,9 +164,9 @@ module.exports = async (req, res) => {
         ok: false,
         error: 'ENV_MISSING',
         missing: {
-          AIRTABLE_BASE_ID:   !baseId,
-          AIRTABLE_TABLE_NAME:!table,
-          AIRTABLE_API_KEY:   !key,
+          AIRTABLE_BASE_ID:    !baseId,
+          AIRTABLE_TABLE_NAME: !table,
+          AIRTABLE_API_KEY:    !key,
         }
       });
     }
@@ -192,19 +184,8 @@ module.exports = async (req, res) => {
     const data = await r.json();
 
     if (!r.ok) {
-      // Užitečné logování do Vercel logs, ať hned vidíš, které pole zlobí
-      console.error('AIRTABLE_ERROR', {
-        status: r.status,
-        details: data,
-        payloadFields: fields
-      });
-
-      return res.status(500).json({
-        ok: false,
-        error: 'AIRTABLE_ERROR',
-        status: r.status,
-        details: data
-      });
+      console.error('AIRTABLE_ERROR', { status: r.status, details: data, payloadFields: fields });
+      return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', status: r.status, details: data });
     }
 
     return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
