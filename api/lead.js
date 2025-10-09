@@ -1,32 +1,34 @@
 // /api/lead.js — Vercel Serverless Function (Airtable)
 // - CORS + OPTIONS
-// - Neposílá prázdné hodnoty (hl. Date/Start/End)
-// - Start/End = Date + HH:MM (pokud čas je)
-// - NIKDY neposílá CreatedAt (computed v Airtable)
-// - Název telefonního pole bere z ENV: AIRTABLE_PHONE_FIELD (fallback: "Phone")
+// - Normalizes Base ID and Table (supports app.../tbl...)
+// - Skips empty values
+// - Phone field name via ENV AIRTABLE_PHONE_FIELD (fallback "Phone")
+// - Date normalization (YYYY-MM-DD; supports DD.MM.YYYY)
+// - Start/End = "YYYY-MM-DD HH:MM" when time present; if no Date, Start/End not sent
+// - Never sends computed fields
 
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
-const normalizeBaseId = (s) => (s || '').split('/')[0];
-const normalizeTable = (s) => {
+const normalizeBaseId = (s) => (s || '').split('/')[0];      // "appXXXX[/...]" -> "appXXXX"
+const normalizeTable  = (s) => {
   if (!s) return 'Leads';
   const parts = String(s).split('/');
-  return parts[parts.length - 1]; // table name nebo tbl...
+  return parts[parts.length - 1];                             // "Leads" or "tblXXXX"
 };
 
 function toAirtableDate(input) {
   if (!input) return undefined;
   const v = String(input).trim();
   if (!v) return undefined;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;             // YYYY-MM-DD
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {                    // DD.MM.YYYY -> YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;                // YYYY-MM-DD
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {                      // DD.MM.YYYY -> YYYY-MM-DD
     const [dd, mm, yyyy] = v.split('.');
     return `${yyyy}-${mm}-${dd}`;
   }
   const d = new Date(v);
   if (!isNaN(d)) return d.toISOString().slice(0, 10);
-  return undefined; // neznámý formát -> neposílat
+  return undefined;                                           // unknown format -> don't send
 }
 
 function toHHMM(input) {
@@ -44,10 +46,10 @@ function toHHMM(input) {
 
 function combineDateTime(dateVal, timeVal) {
   const d = toAirtableDate(dateVal);
-  if (!d) return undefined;   // bez data neposílat (Airtable DateTime by spadlo)
+  if (!d) return undefined;                                   // no Date => don't send Start/End
   const t = toHHMM(timeVal);
-  if (!t) return d;           // jen datum (OK pro Date field)
-  return `${d} ${t}`;         // Airtable akceptuje "YYYY-MM-DD HH:MM"
+  if (!t) return d;                                           // only Date
+  return `${d} ${t}`;                                         // Airtable accepts "YYYY-MM-DD HH:MM"
 }
 
 function addIfPresent(target, key, val) {
@@ -57,6 +59,7 @@ function addIfPresent(target, key, val) {
 }
 
 module.exports = async (req, res) => {
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
@@ -66,12 +69,14 @@ module.exports = async (req, res) => {
 
   try {
     let body = req.body;
-    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch { body = {}; }
+    }
 
     // Honeypot
     if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
 
-    // Name: preferuj `name`, jinak slož z first/last
+    // Prefer explicit name, otherwise build from first/last
     const first = (body.first_name || '').trim();
     const last  = (body.last_name  || '').trim();
     const name  = (body.name && String(body.name).trim())
@@ -82,22 +87,22 @@ module.exports = async (req, res) => {
     addIfPresent(fields, 'Name', name);
     addIfPresent(fields, 'Email', body.email);
 
-    // Telefon — název pole z ENV (např. "Telefon"), fallback "Phone"
+    // Phone — configurable via ENV to match your Airtable column (e.g., "Telefon")
     const phoneVal = (body.phone && String(body.phone).trim()) || undefined;
     const phoneFieldName = (process.env.AIRTABLE_PHONE_FIELD || 'Phone').trim();
     addIfPresent(fields, phoneFieldName, phoneVal);
 
-    // Datum + časy
+    // Date / Start / End
     const atDate = toAirtableDate(body.date);
     if (atDate) addIfPresent(fields, 'Date', atDate);
 
     const startCombined = combineDateTime(body.date, body.start_time);
     if (startCombined) addIfPresent(fields, 'Start', startCombined);
 
-    const endCombined   = combineDateTime(body.date, body.end_time);
-    if (endCombined)   addIfPresent(fields, 'End', endCombined);
+    const endCombined = combineDateTime(body.date, body.end_time);
+    if (endCombined) addIfPresent(fields, 'End', endCombined);
 
-    // Další volitelné
+    // Other optional fields
     addIfPresent(fields, 'Venue', body.venue);
     addIfPresent(fields, 'Type', body.type);
 
@@ -108,32 +113,24 @@ module.exports = async (req, res) => {
     addIfPresent(fields, 'Note', body.note);
     addIfPresent(fields, 'UA', body.ua);
     addIfPresent(fields, 'Referer', body.referer);
-    // CreatedAt nikdy neposíláme (computed)
+    // Never send computed fields like CreatedAt
 
-    // ENV
+    // ENV (normalized)
     const baseId = normalizeBaseId(process.env.AIRTABLE_BASE_ID);
     const table  = normalizeTable(process.env.AIRTABLE_TABLE_NAME);
     const key    = process.env.AIRTABLE_API_KEY;
 
     if (!baseId || !table || !key) {
-      return res.status(500).json({
-        ok: false,
-        error: 'ENV_MISSING',
-        missing: {
-          AIRTABLE_BASE_ID: !baseId,
-          AIRTABLE_TABLE_NAME: !table,
-          AIRTABLE_API_KEY: !key,
-        },
-      });
+      return res.status(500).json({ ok: false, error: 'ENV_MISSING', missing: {
+        AIRTABLE_BASE_ID: !baseId,
+        AIRTABLE_TABLE_NAME: !table,
+        AIRTABLE_API_KEY: !key,
+      }});
     }
 
-    // Zápis do Airtable
     const r = await fetch(AIRTABLE_URL(baseId, table), {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ records: [{ fields }] }),
     });
 
