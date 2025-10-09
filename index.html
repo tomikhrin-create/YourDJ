@@ -550,28 +550,43 @@
       }
 
       // Contact form -> /api/lead (Airtable)
-      var form = document.getElementById('contactForm');
-      if(form){
-        form.addEventListener('submit', function(e){
-          e.preventDefault();
-          var fd = new FormData(form);
-          if(fd.get('bot-field')) return; // honeypot
-          var payload = Object.fromEntries(fd.entries());
-          payload.ua = navigator.userAgent;
-          payload.referer = location.href;
-          fetch('/api/lead', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(payload) })
-          .then(function(r){ return r.json().then(function(data){ return { ok:r.ok, data:data }; }); })
-          .then(function(res){
-            document.getElementById('contactSuccess').classList.toggle('hidden', !res.ok);
-            document.getElementById('contactError').classList.toggle('hidden', res.ok);
-            if(res.ok) form.reset();
-          })
-          .catch(function(){
-            document.getElementById('contactSuccess').classList.add('hidden');
-            document.getElementById('contactError').classList.remove('hidden');
-          });
-        });
-      }
+var form = document.getElementById('contactForm');
+if(form){
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var fd = new FormData(form);
+    if(fd.get('bot-field')) return; // honeypot
+
+    // převedeme formulář na obyč. objekt
+    var payload = Object.fromEntries(fd.entries());
+
+    // ⬅️ TADY JE TEN DŮLEŽITÝ KROK: pole "attendees" vůbec neposílej
+    delete payload.attendees;
+
+    // doplníme metainfo
+    payload.ua = navigator.userAgent;
+    payload.referer = location.href;
+
+    fetch('/api/lead', {
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){
+      return r.json().then(function(data){ return { ok:r.ok, data:data }; });
+    })
+    .then(function(res){
+      document.getElementById('contactSuccess').classList.toggle('hidden', !res.ok);
+      document.getElementById('contactError').classList.toggle('hidden', res.ok);
+      if(res.ok) form.reset();
+    })
+    .catch(function(){
+      document.getElementById('contactSuccess').classList.add('hidden');
+      document.getElementById('contactError').classList.remove('hidden');
+    });
+  });
+}
+
           // === Carousels (logos & gallery) ===
       function ydjInitScroller(trackId, prevId, nextId){
         var track=document.getElementById(trackId);
