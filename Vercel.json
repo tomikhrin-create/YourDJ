@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/svatebni-dj-brno", "destination": "/svatebni-dj-brno/", "permanent": true },
+    { "source": "/svatebni-dj-ostrava", "destination": "/svatebni-dj-ostrava/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }]
+    }
+  ]
+}
