@@ -6,61 +6,87 @@
   <title>YourDJs · Svatební DJ — Nezapomenutelný svatební den</title>
   <meta name="description" content="YourDJs – Svatební DJ pro Moravu & Slezsko. Profesionální ozvučení, playlist na míru, moderace + jedinečné společenské hry. Cena na vyžádání. Nezávazná konzultace zdarma."/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
-  <meta name="keywords" content="svatební DJ, DJ na svatbu, Morava, Slezsko, Ostrava, Brno, Olomouc, playlist na míru, moderace, svatební hry, ozvučení"/>
+  <!-- meta keywords jsou dnes ignorované; klidně je smaž pro čistotu -->
   <base href="/">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://yourdjs.cz/"/>
+
   <!-- Open Graph / Twitter -->
-  <link rel="canonical" href="https://tvoje-domena.cz/"/>
   <meta property="og:title" content="YourDJs · Svatební DJ — Nezapomenutelný svatební den"/>
   <meta property="og:description" content="Svatební DJ pro Moravu & Slezsko. Profesionální ozvučení, playlist na míru, moderace i společenské hry. Cena na vyžádání. Nezávazná konzultace zdarma."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://tvoje-domena.cz/"/>
-  <meta property="og:image" content="https://tvoje-domena.cz/assets/og.jpg"/>
+  <meta property="og:url" content="https://yourdjs.cz/"/>
+  <meta property="og:image" content="https://yourdjs.cz/assets/og.jpg"/>
   <meta property="og:locale" content="cs_CZ"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="YourDJs · Svatební DJ — Nezapomenutelný svatební den"/>
   <meta name="twitter:description" content="Svatební DJ pro Moravu & Slezsko. Profesionální ozvučení, playlist na míru, moderace i společenské hry. Cena na vyžádání. Nezávazná konzultace zdarma."/>
-  <meta name="twitter:image" content="https://tvoje-domena.cz/assets/og.jpg"/>
+  <meta name="twitter:image" content="https://yourdjs.cz/assets/og.jpg"/>
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    /* Utilities */
     .no-scrollbar::-webkit-scrollbar{display:none}
     .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-    .glow-hover:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(251,191,36,.25),0 0 24px rgba(245,158,11,.55)}
     .glow-hover{transition:transform .2s ease,box-shadow .2s ease}
+    .glow-hover:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(251,191,36,.25),0 0 24px rgba(245,158,11,.55)}
     img[loading="lazy"]{content-visibility:auto}
     .fluid-title{font-size:clamp(2rem,8vw,3.5rem)}
     .balance{text-wrap:balance}
-
-    /* Social proof: subtle white gradient border */
     #duvera .sp-card{position:relative;border-radius:1rem;background:rgba(255,255,255,.05)}
     #duvera .sp-card::before{content:"";position:absolute;inset:0;padding:1px;border-radius:1rem;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-
-    /* Gallery – two-row horizontal carousel (no vertical stacking) */
     #galleryTrack{--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem}
     #galleryTrack .g-item{width:100%;height:100%;border-radius:1rem;overflow:hidden;background:rgba(255,255,255,.06);scroll-snap-align:start}
     #galleryTrack .g-item img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
-
-    /* Logo carousel snapping */
     #logoTrack{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
     #logoTrack img{scroll-snap-align:start}
-
-    /* Progressive text reveal */
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
     .reveal.in{opacity:1;transform:translateY(0)}
     @media (max-width:640px){.reveal{transition-duration:.85s}}
     @media (prefers-reduced-motion:reduce){.reveal,.reveal.in{opacity:1;transform:none;transition:none}}
-  </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"YourDJs — Svatební DJ","areaServed":["Morava","Slezsko"],"email":"mailto:tomikhrin@gmail.com","url":"https://tvoje-domena.cz/","image":"https://tvoje-domena.cz/assets/og.jpg","priceRange":"Cena na vyžádání","knowsAbout":["svatební DJ","ozvučení","svatební hry","moderování","svatební playlist"],"address":{"@type":"PostalAddress","addressCountry":"CZ"},"sameAs":[]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Kolik stojí svatební DJ na Moravě a ve Slezsku?","acceptedAnswer":{"@type":"Answer","text":"Cena je na vyžádání podle délky hraní, místa konání a techniky. Po odeslání formuláře obratem pošlu nabídku na míru."}},{"@type":"Question","name":"Jak vypadá playlist na svatbu a berete přání hostů?","acceptedAnswer":{"@type":"Answer","text":"Playlist stavím na míru – od evergreenů pro rodiče po aktuální hity. Během večera beru rozumné requesty a hlídám flow, aby byl parket plný."}},{"@type":"Question","name":"Máte vlastní ozvučení a světla?","acceptedAnswer":{"@type":"Answer","text":"Ano. Přivezu profesionální aparaturu a světelnou techniku včetně mikrofonu na proslovy. V případě potřeby mám záložní vybavení."}},{"@type":"Question","name":"Pomůžete s moderací a harmonogramem večera?","acceptedAnswer":{"@type":"Answer","text":"Ano, pomáhám s načasováním prvního tance, krájení dortu, her a dalších momentů tak, aby energie večera gradovala."}},{"@type":"Question","name":"Jak probíhá rezervace termínu a smlouva?","acceptedAnswer":{"@type":"Answer","text":"Po vyplnění formuláře potvrdím dostupnost, probereme představu a pošlu smlouvu s jasnými podmínkami. Záloha obvykle 20–30 %."}},{"@type":"Question","name":"Co když je váš termín obsazený?","acceptedAnswer":{"@type":"Answer","text":"Dám vědět ihned. Pokud už hraji jinde, doporučím ověřené kolegy z regionu. Případně nabídnu jiné dostupné datum."}},{"@type":"Question","name":"Hrajete i na venkovních svatbách / na zahradě?","acceptedAnswer":{"@type":"Answer","text":"Ano, pokud je k dispozici přívod elektřiny a suché kryté místo pro techniku. Přizpůsobím aparaturu prostoru i počtu hostů."}},{"@type":"Question","name":"Jaké písně doporučujete na první tanec?","acceptedAnswer":{"@type":"Answer","text":"Pošlu vám kurátorovaný seznam 50 ověřených skladeb pro první tanec i rodiče. Rád poradím s výběrem podle stylu vaší svatby."}},{"@type":"Question","name":"Dojezd a cestovné po Moravě a Slezsku","acceptedAnswer":{"@type":"Answer","text":"Cestovné řeším individuálně dle vzdálenosti. Většina míst v regionu je v paušálu; delší trasy nacením férově předem."}},{"@type":"Question","name":"Jak dlouho dopředu rezervovat svatebního DJ?","acceptedAnswer":{"@type":"Answer","text":"Oblíbené termíny (květen–září) se plní 6–12 měsíců dopředu. Pokud plánujete svatbu narychlo, napište i tak – ověřím volné termíny."}}]}</script>
-  <style>
-    /* Edge fades for carousels */
     .edge-fade{pointer-events:none;position:absolute;top:0;bottom:0;width:48px}
     .edge-left{left:0;background:linear-gradient(90deg,rgba(0,0,0,1),rgba(0,0,0,0))}
     .edge-right{right:0;background:linear-gradient(270deg,rgba(0,0,0,1),rgba(0,0,0,0))}
-    /* Blur-up for gallery images */
     .blur-up{filter:blur(12px);transform:scale(1.02);opacity:.85}
     .blur-up.loaded{filter:none;transform:none;opacity:1;transition:filter .4s ease,transform .4s ease,opacity .4s ease}
   </style>
+
+  <!-- LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "YourDJs — Svatební DJ",
+    "areaServed": ["Morava","Slezsko"],
+    "email": "mailto:tomikhrin@gmail.com",
+    "url": "https://yourdjs.cz/",
+    "image": "https://yourdjs.cz/assets/og.jpg",
+    "priceRange": "Cena na vyžádání",
+    "knowsAbout": ["svatební DJ","ozvučení","svatební hry","moderování","svatební playlist"],
+    "address": { "@type":"PostalAddress","addressCountry":"CZ" }
+  }
+  </script>
+
+  <!-- WebSite (pro brand + vyhledávání) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "url":"https://yourdjs.cz/",
+    "name":"YourDJs",
+    "publisher":{
+      "@type":"Organization",
+      "name":"YourDJs",
+      "logo":{"@type":"ImageObject","url":"https://yourdjs.cz/assets/og.jpg"}
+    },
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://yourdjs.cz/?q={search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 <body class="min-h-screen bg-black text-white">
 
