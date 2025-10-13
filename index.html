@@ -360,115 +360,96 @@
               <li class="flex gap-2"><span class="text-amber-400">✓</span>Profesionální moderování po celý den</li>
             </ul>
           </div>
-          <form id="contactForm" class="space-y-4" autocomplete="on">
-            <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true"/>
-            <a href="/svatebni-dj-ostrava/" class="hover:text-amber-600">Svatební DJ Ostrava</a>
-            <a href="/svatebni-dj-brno/" class="hover:text-amber-600">Svatební DJ Brno</a>
-          <!-- 1) Křestní jméno + Příjmení -->
-<div class="grid gap-4 sm:grid-cols-2">
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="first_name">Křestní jméno</label>
-    <input id="first_name" name="first_name" required type="text" placeholder="Jana"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-  </div>
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="last_name">Příjmení</label>
-    <input id="last_name" name="last_name" required type="text" placeholder="Nováková"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-  </div>
-</div>
+        <form id="contactForm" class="space-y-4" autocomplete="on">
+  <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true"/>
 
-<!-- 2) E-mail + Telefon -->
-<div class="mt-4 grid gap-4 sm:grid-cols-2">
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="email2">E-mail</label>
-    <input id="email2" name="email" required type="email" placeholder="vas@email.cz"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+  <!-- Jméno + Příjmení -->
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="first_name">Křestní jméno</label>
+      <input id="first_name" name="first_name" required type="text" placeholder="Jana"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+    </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="last_name">Příjmení</label>
+      <input id="last_name" name="last_name" required type="text" placeholder="Nováková"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+    </div>
   </div>
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="phone">Telefon</label>
-    <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+420 777 123 456"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-  </div>
-</div>
 
-<!-- 3) Datum + Místo -->
-<div class="mt-4 grid gap-4 sm:grid-cols-2">
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="date2">Datum akce</label>
-    <input id="date2" name="date" type="date"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
+  <!-- E-mail + Telefon -->
+  <div class="mt-4 grid gap-4 sm:grid-cols-2">
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="email2">E-mail</label>
+      <input id="email2" name="email" required type="email" placeholder="vas@email.cz"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+    </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="phone">Telefon</label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+420 777 123 456"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+    </div>
   </div>
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="venue2">Místo</label>
-    <input id="venue2" name="venue" type="text" placeholder="město / místo"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-  </div>
-</div>
 
-<!-- 4) Typ akce + Předpokládaný počet -->
-<div class="mt-4 grid gap-4 sm:grid-cols-2">
-  <div>
+  <!-- Datum + Místo -->
+  <div class="mt-4 grid gap-4 sm:grid-cols-2">
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="date2">Datum akce</label>
+      <input id="date2" name="date" type="date"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
+    </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium" for="venue2">Místo</label>
+      <input id="venue2" name="venue" type="text" placeholder="město / místo"
+             class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
+    </div>
+  </div>
+
+  <!-- Typ akce -->
+  <div class="mt-4">
     <label class="mb-1 block text-sm font-medium" for="type">Typ akce</label>
     <select id="type" name="type"
             class="w-full appearance-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400">
-      <option value="">Vyberte…</option>
-  <option value="Svatební den">Svatební den</option>
-  <option value="Firemní večírek">Firemní večírek</option>
-  <option value="Narozeniny">Narozeniny</option>
-  <option value="Konference">Konference</option>
-  <option value="Veřejná akce">Veřejná akce</option>
+      <option value="" class="bg-black">Vyberte…</option>
+      <option class="bg-black" value="svatebni-den">Svatební den</option>
+      <option class="bg-black" value="firemni-vecirek">Firemní večírek</option>
+      <option class="bg-black" value="narozeniny">Oslava narozenin</option>
+      <option class="bg-black" value="konference">Konference</option>
+      <option class="bg-black" value="verejna-akce">Veřejná akce</option>
     </select>
   </div>
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="attendees">Předpokládaný počet</label>
-    <input id="attendees" name="attendees" type="number" min="1" placeholder="např. 80"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"/>
-  </div>
-</div>
 
-<!-- 5) Začátek + Konec -->
-<div class="mt-4 grid gap-4 sm:grid-cols-2">
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="start_time">Čas začátek</label>
-    <input id="start_time" name="start_time" type="time"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
+  <!-- Zdroj -->
+  <div class="mt-4">
+    <label class="mb-1 block text-sm font-medium" for="source">Odkud jste se o mně dozvěděli</label>
+    <select id="source" name="source"
+            class="w-full appearance-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400">
+      <option value="" class="bg-black">Vyberte…</option>
+      <option class="bg-black" value="facebook">Facebook</option>
+      <option class="bg-black" value="instagram">Instagram</option>
+      <option class="bg-black" value="google">Google</option>
+      <option class="bg-black" value="doporučení">Doporučení</option>
+      <option class="bg-black" value="výstava">Výstava</option>
+      <option class="bg-black" value="jinak">Jinak</option>
+    </select>
   </div>
-  <div>
-    <label class="mb-1 block text-sm font-medium" for="end_time">Čas konec</label>
-    <input id="end_time" name="end_time" type="time"
-           class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400"/>
+
+  <!-- Poznámka -->
+  <div class="mt-4">
+    <label class="mb-1 block text-sm font-medium" for="note2">Poznámka</label>
+    <textarea id="note2" name="note" rows="4" placeholder="Představa hudby, první tanec, speciální požadavky…"
+              class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"></textarea>
   </div>
-</div>
 
-<!-- 6) Odkud jste se o mně dozvěděli -->
-<div class="mt-4">
-  <label class="mb-1 block text-sm font-medium" for="source">Odkud jste se o mně dozvěděli</label>
-  <select id="source" name="source"
-          class="w-full appearance-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none focus:border-amber-400">
-    <option value="" class="bg-black">Vyberte…</option>
-    <option class="bg-black" value="fb">Facebook</option>
-    <option class="bg-black" value="ig">Instagram</option>
-    <option class="bg-black" value="google">Google</option>
-    <option class="bg-black" value="doporučení">Doporučení</option>
-    <option class="bg-black" value="vystava">Výstava</option>
-    <option class="bg-black" value="jinak">Jinak</option>
-  </select>
-</div>
+  <div id="contactSuccess" class="hidden rounded-xl bg-emerald-900/40 p-3 text-sm text-emerald-300">Díky! Vaše poptávka byla odeslána. Ozvu se do 24 hodin.</div>
+  <div id="contactError" class="hidden rounded-xl bg-red-900/40 p-3 text-sm text-red-200">Něco se nepovedlo. Zkuste to prosím znovu nebo napište na tomikhrin@gmail.com.</div>
 
-<!-- 7) Poznámka -->
-<div class="mt-4">
-  <label class="mb-1 block text-sm font-medium" for="note2">Poznámka</label>
-  <textarea id="note2" name="note" rows="4" placeholder="Představa hudby, první tanec, speciální požadavky…"
-            class="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:border-amber-400"></textarea>
-</div>
-            <div id="contactSuccess" class="hidden rounded-xl bg-emerald-900/40 p-3 text-sm text-emerald-300">Díky! Vaše poptávka byla odeslána. Ozvu se vám do 24 hodin.</div>
-            <div id="contactError" class="hidden rounded-xl bg-red-900/40 p-3 text-sm text-red-200">Něco se nepovedlo. Zkuste to prosím znovu nebo napište na tomikhrin@gmail.com.</div>
-            <div class="flex items-center gap-3">
-              <button type="submit" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Odeslat poptávku</button>
-              <span class="text-sm text-white/60">* Odpovím do 24 hodin</span>
-            </div>
-          </form>
+  <div class="flex items-center gap-3">
+    <button type="submit" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover focus:ring-yellow-300">Odeslat poptávku</button>
+    <span class="text-sm text-white/60">* Odpovím do 24 hodin</span>
+  </div>
+</form>
+
         </div>
       </div>
     </div>
