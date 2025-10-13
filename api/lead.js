@@ -140,8 +140,13 @@ module.exports = async (req, res) => {
     const atDate = toAirtableDate(body.date);
     const startDateOnly = String(process.env.AIRTABLE_START_IS_DATE_ONLY||'').trim()==='1';
     const endDateOnly   = String(process.env.AIRTABLE_END_IS_DATE_ONLY  ||'').trim()==='1';
-    const startVal = composeDateOrDateTime(body.date, body.start_time, startDateOnly);
-    const endVal   = composeDateOrDateTime(body.date, body.end_time,   endDateOnly);
+ if (body.start_time) {
+  const startVal = composeDateOrDateTime(body.date, body.start_time, startDateOnly);
+  addIfPresent(fields, 'Start', startVal);
+}
+if (body.end_time) {
+  const endVal = composeDateOrDateTime(body.date, body.end_time, endDateOnly);
+  addIfPresent(fields, 'End', endVal);
 
     // Normalizace Single selectů
     const typeVal   = normalizeSelectValue(body.type,   TYPE_LABELS,   ENFORCE_TYPE_WHITELIST);
