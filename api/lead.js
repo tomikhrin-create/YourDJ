@@ -1,9 +1,9 @@
-// /api/lead.js — Vercel Serverless Function → Airtable (oprava pořadí, validace selectů, bez Attendees)
+// /api/lead.js — Airtable lead + fallback bez Type/Source při 422 (INVALID_MULTIPLE_CHOICE_OPTIONS)
 
 const AIRTABLE_URL = (base, table) =>
   `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}`;
 
-// ====== Mapa názvů sloupců (přizpůsobitelné přes ENV) ======
+// ====== Sloupce (případně změň přes ENV) ======
 const FIELDS = {
   NAME:     process.env.AIRTABLE_NAME_FIELD     || 'Name',
   EMAIL:    process.env.AIRTABLE_EMAIL_FIELD    || 'Email',
@@ -19,17 +19,14 @@ const FIELDS = {
   REFERER:  process.env.AIRTABLE_REFERER_FIELD  || 'Referer',
 };
 
-// ====== Přípustné hodnoty pro Single-select (přizpůsob podle Airtablu) ======
+// ====== Mapování hodnot (můžeš rozšířit podle svých labelů v Airtablu) ======
 const TYPE_LABELS = {
   'svatebni-den':    'Svatební den',
   'firemni-vecirek': 'Firemní večírek',
   'narozeniny':      'Narozeniny',
   'konference':      'Konference',
   'verejna-akce':    'Veřejná akce',
-  // rezerva: pokud v Airtablu máš náhodou varianty s velkým písmenem / koncovou mezerou,
-  // můžeš je přidat jako další mapované hodnoty na stejné labely.
 };
-
 const SOURCE_LABELS = {
   'facebook':   'Facebook',
   'instagram':  'Instagram',
@@ -51,60 +48,48 @@ function toAirtableDate(input) {
   if (!input) return undefined;
   const v = String(input).trim();
   if (!v) return undefined;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;                 // YYYY-MM-DD
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) {                        // DD.MM.YYYY
-    const [dd, mm, yyyy] = v.split('.');
-    return `${yyyy}-${mm}-${dd}`;
-  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(v)) { const [dd, mm, yyyy] = v.split('.'); return `${yyyy}-${mm}-${dd}`; }
   const d = new Date(v);
   if (!isNaN(d)) return d.toISOString().slice(0, 10);
-  return undefined;                                            // neznámý formát -> neposílat
+  return undefined;
 }
 function toHHMM(input) {
   if (!input) return undefined;
   let v = String(input).trim();
-  const secMatch = v.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);      // HH:MM:SS -> HH:MM
-  if (secMatch) v = `${secMatch[1]}:${secMatch[2]}`;
-  const m = v.match(/^(\d{1,2}):(\d{2})$/);
-  if (!m) return undefined;
-  const h = Number(m[1]);
-  const min = Number(m[2]);
-  if (Number.isNaN(h) || Number.isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return undefined;
-  return `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+  const mSS = v.match(/^(\d{1,2}):(\d{2}):(\d{2})$/); if (mSS) v = `${mSS[1]}:${mSS[2]}`;
+  const m = v.match(/^(\d{1,2}):(\d{2})$/); if (!m) return undefined;
+  const h = +m[1], min = +m[2];
+  if (h<0 || h>23 || min<0 || min>59) return undefined;
+  return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
 }
 function composeDateOrDateTime(dateVal, timeVal, dateOnly) {
-  const d = toAirtableDate(dateVal);
-  if (!d) return undefined;
-  if (dateOnly) return d;                // sloupec je Date-only v Airtable
-  const t = toHHMM(timeVal);
-  return t ? `${d} ${t}` : d;            // pokud není čas, pošli jen datum
+  const d = toAirtableDate(dateVal); if (!d) return undefined;
+  if (dateOnly) return d;
+  const t = toHHMM(timeVal); return t ? `${d} ${t}` : d;
 }
-function stripQuotes(s) {
-  const v = (s || '').toString().trim();
-  if (!v) return '';
-  const q1=v[0], q2=v[v.length-1];
-  if ((q1==='"'&&q2==='"') || (q1==="'"&&q2==="'" )) return v.slice(1,-1).trim();
-  return v;
-}
-function slugifyLower(s) {
-  return (s||'')
-    .toString()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g,'')   // odstranění diakritiky
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-}
-function mapSelectValue(raw, map) {
+function stripQuotes(s){ const v=(s||'').toString().trim(); if(!v) return ''; const a=v[0], b=v[v.length-1]; return ((a===b) && (a==='"'||a==="'")) ? v.slice(1,-1).trim() : v; }
+function slugifyLower(s){ return (s||'').toString().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function mapSelectValue(raw, map){
   const incoming = stripQuotes(raw);
   if (!incoming) return undefined;
-  // přesný match (kdyby už chodil label)
-  for (const label of Object.values(map)) {
-    if (incoming === label) return label;
-  }
-  // slug match
+  // 1) už je to přesný label?
+  for (const label of Object.values(map)) if (incoming === label) return label;
+  // 2) pošli mapped label dle slugu (např. 'svatebni-den' -> 'Svatební den')
   const k = slugifyLower(incoming);
-  return map[k]; // může být undefined -> pole se nepošle
+  if (map[k]) return map[k];
+  // 3) poslední šance: pošli přímo to, co přišlo (pokud to přesně existuje v Airtablu, projde; jinak fallback to zachytí)
+  return incoming;
+}
+
+async function sendToAirtable({baseId, table, key, fields}) {
+  const r = await fetch(AIRTABLE_URL(baseId, table), {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ records: [{ fields }] }),
+  });
+  const data = await r.json().catch(()=> ({}));
+  return { r, data };
 }
 
 module.exports = async (req, res) => {
@@ -113,91 +98,83 @@ module.exports = async (req, res) => {
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
-
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ ok:false, error:'METHOD_NOT_ALLOWED' });
 
   try {
     let body = req.body;
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch { body = {}; }
-    }
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
     body = body || {};
-
-    // honeypot
-    if (body['bot-field']) return res.status(200).json({ ok: true, skipped: true });
+    if (body['bot-field']) return res.status(200).json({ ok:true, skipped:true });
 
     // Name
-    const first = (body.first_name || '').trim();
-    const last  = (body.last_name  || '').trim();
-    const name  = (body.name && String(body.name).trim())
-      ? String(body.name).trim()
-      : [first, last].filter(Boolean).join(' ');
+    const first = (body.first_name||'').trim();
+    const last  = (body.last_name||'').trim();
+    const name  = (body.name && String(body.name).trim()) ? String(body.name).trim() : [first,last].filter(Boolean).join(' ');
 
     // Date/Time
     const atDate        = toAirtableDate(body.date);
-    const startDateOnly = String(process.env.AIRTABLE_START_IS_DATE_ONLY || '').trim() === '1';
-    const endDateOnly   = String(process.env.AIRTABLE_END_IS_DATE_ONLY   || '').trim() === '1';
+    const startDateOnly = String(process.env.AIRTABLE_START_IS_DATE_ONLY||'').trim()==='1';
+    const endDateOnly   = String(process.env.AIRTABLE_END_IS_DATE_ONLY||'').trim()==='1';
     const startVal      = composeDateOrDateTime(body.date, body.start_time, startDateOnly);
     const endVal        = composeDateOrDateTime(body.date, body.end_time,   endDateOnly);
 
-    // Single-select mapování (nepošleme nic, když hodnota nesedí)
-    const typeVal   = mapSelectValue(body.type,   TYPE_LABELS);
-    const sourceVal = mapSelectValue(body.source, SOURCE_LABELS);
-
-    // Poskládání fields (POZOR: teď už existuje 'startVal','endVal' a 'fields' až teď!)
-    const fields = {};
-    addIfPresent(fields, FIELDS.NAME,    name);
-    addIfPresent(fields, FIELDS.EMAIL,   body.email && String(body.email).trim() || undefined);
-    addIfPresent(fields, FIELDS.PHONE,   body.phone && String(body.phone).trim() || undefined);
-    addIfPresent(fields, FIELDS.DATE,    atDate);
-    addIfPresent(fields, FIELDS.START,   startVal);
-    addIfPresent(fields, FIELDS.END,     endVal);
-    addIfPresent(fields, FIELDS.VENUE,   body.venue);
-    addIfPresent(fields, FIELDS.TYPE,    typeVal);
-    addIfPresent(fields, FIELDS.SOURCE,  sourceVal);
-    addIfPresent(fields, FIELDS.NOTE,    body.note);
-    addIfPresent(fields, FIELDS.UA,      body.ua);
-    addIfPresent(fields, FIELDS.REFERER, body.referer);
+    // Selecty
+    let typeVal   = mapSelectValue(body.type,   TYPE_LABELS);
+    let sourceVal = mapSelectValue(body.source, SOURCE_LABELS);
 
     // ENV
     const baseId = (process.env.AIRTABLE_BASE_ID || '').split('/')[0];
     const table  = (process.env.AIRTABLE_TABLE_NAME || 'Leads').split('/').pop();
     const key    = process.env.AIRTABLE_API_KEY;
     if (!baseId || !table || !key) {
-      return res.status(500).json({
-        ok: false,
-        error: 'ENV_MISSING',
-        missing: {
-          AIRTABLE_BASE_ID: !baseId,
-          AIRTABLE_TABLE_NAME: !table,
-          AIRTABLE_API_KEY: !key,
-        }
-      });
+      return res.status(500).json({ ok:false, error:'ENV_MISSING',
+        missing:{ AIRTABLE_BASE_ID:!baseId, AIRTABLE_TABLE_NAME:!table, AIRTABLE_API_KEY:!key } });
     }
 
-    // Odeslání do Airtable
-    const r = await fetch(AIRTABLE_URL(baseId, table), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ records: [{ fields }] }),
-    });
+    // Fields
+    const makeFields = (omit = {}) => {
+      const f = {};
+      addIfPresent(f, FIELDS.NAME,    name);
+      addIfPresent(f, FIELDS.EMAIL,   body.email && String(body.email).trim() || undefined);
+      addIfPresent(f, FIELDS.PHONE,   body.phone && String(body.phone).trim() || undefined);
+      addIfPresent(f, FIELDS.DATE,    atDate);
+      addIfPresent(f, FIELDS.START,   startVal);
+      addIfPresent(f, FIELDS.END,     endVal);
+      addIfPresent(f, FIELDS.VENUE,   body.venue);
+      if (!omit[FIELDS.TYPE])   addIfPresent(f, FIELDS.TYPE,   typeVal);
+      if (!omit[FIELDS.SOURCE]) addIfPresent(f, FIELDS.SOURCE, sourceVal);
+      addIfPresent(f, FIELDS.NOTE,    body.note);
+      addIfPresent(f, FIELDS.UA,      body.ua);
+      addIfPresent(f, FIELDS.REFERER, body.referer);
+      return f;
+    };
 
-    const data = await r.json().catch(() => ({})); // ochrana když Airtable vrátí prázdno
+    // 1. pokus (se selecty)
+    let { r, data } = await sendToAirtable({ baseId, table, key, fields: makeFields() });
+
+    // Pokud Airtable odmítne vytvořit novou možnost, zkusíme to bez problematického pole/í
+    const isInvalidOption422 = (!r.ok && r.status === 422 && data?.error?.type === 'INVALID_MULTIPLE_CHOICE_OPTIONS');
+    if (isInvalidOption422) {
+      // heuristika: zpráva obsahuje název pole; zkusíme odříznout TYPE/SOURCE
+      const msg = (data?.error?.message || '').toLowerCase();
+      const omit = {};
+      if (msg.includes(`"${FIELDS.TYPE.toLowerCase()}"`) || msg.includes('field type'))   omit[FIELDS.TYPE] = true;
+      if (msg.includes(`"${FIELDS.SOURCE.toLowerCase()}"`) || msg.includes('field source')) omit[FIELDS.SOURCE] = true;
+      // kdyby nebylo jasné, prostě vynecháme obě (půjde to uložit bez nich)
+      if (Object.keys(omit).length === 0) { omit[FIELDS.TYPE] = true; omit[FIELDS.SOURCE] = true; }
+
+      ({ r, data } = await sendToAirtable({ baseId, table, key, fields: makeFields(omit) }));
+    }
 
     if (!r.ok) {
-      console.error('AIRTABLE_ERROR', { status: r.status, details: data, payloadFields: fields });
-      return res.status(500).json({ ok: false, error: 'AIRTABLE_ERROR', status: r.status, details: data });
+      console.error('AIRTABLE_ERROR', { status:r.status, details:data });
+      return res.status(500).json({ ok:false, error:'AIRTABLE_ERROR', status:r.status, details:data });
     }
 
-    return res.status(200).json({ ok: true, id: data.records?.[0]?.id || null });
+    return res.status(200).json({ ok:true, id: data.records?.[0]?.id || null });
   } catch (e) {
     console.error('SERVER_ERROR', e);
-    return res.status(500).json({ ok: false, error: 'SERVER_ERROR' });
+    return res.status(500).json({ ok:false, error:'SERVER_ERROR' });
   }
 };
