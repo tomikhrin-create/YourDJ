@@ -101,7 +101,14 @@
         <a href="#recenze" class="text-sm font-medium hover:text-amber-600">Recenze</a>
         <a href="#faq" class="text-sm font-medium hover:text-amber-600">FAQ</a>
       </nav>
-      <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover active:translate-y-0 active:scale-[0.98] focus:ring-yellow-300">Rezervovat termín</a>
+    <a href="#kontakt"
+   class="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-[15px] font-extrabold tracking-wide
+          text-black bg-gradient-to-r from-yellow-400 via-amber-400 to-amber-600
+          shadow-[0_8px_24px_rgba(245,158,11,.35)] ring-2 ring-yellow-300/60
+          hover:shadow-[0_12px_28px_rgba(245,158,11,.45)] transition
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-yellow-300">
+  Rezervovat termín
+</a>
     </div>
   </header>
 
@@ -121,10 +128,26 @@
       </h1>
       <div class="mt-8 reveal">
         <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-3">
-          <video class="w-full aspect-video rounded-xl" controls preload="none" poster="/assets/hero-poster.jpg">
-            <source src="/assets/hero.mp4" type="video/mp4"/>
-          </video>
-        </div>
+          <video class="w-full aspect-video rounded-xl"
+         controls
+         preload="metadata"
+         poster=https://ymiph2qui2idyxca.public.blob.vercel-storage.com/Hero.webm
+         playsinline>
+    <!-- 1) preferuj WebM, 2) fallback MP4 -->
+    <source src="https://<tvoje-jmeno>.public.blob.vercel-storage.com/cases/yourdjs-hero.webm" type="video/webm"/>
+    <source src="https://<tvoje-jmeno>.public.blob.vercel-storage.com/cases/yourdjs-hero.mp4" type="video/mp4"/>
+  </video>
+          <div class="mt-8 reveal relative">
+  <!-- glow za videem -->
+  <div class="pointer-events-none absolute -inset-6 sm:-inset-8 -z-10 rounded-[1.25rem]
+              before:content-[''] before:absolute before:inset-0 before:rounded-[inherit]
+              before:bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.22)_0%,rgba(255,255,255,0.08)_35%,rgba(0,0,0,0)_70%)]
+              before:blur-0"></div>
+
+  <!-- sem patří ten <div> s videem z předchozího kroku -->
+  <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-3">
+    …video…
+  </div>
       </div>
       <ul class="mt-8 flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-6 gap-y-2 text-white/80">
         <li class="flex items-center gap-2 reveal"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span><span class="uppercase tracking-widest text-xs sm:text-sm font-semibold">150 + svatebních akcí</span></li>
