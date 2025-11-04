@@ -1,5 +1,6 @@
 {
   "redirects": [
+    { "source": "https://www.yourdjs.cz/(.*)", "destination": "https://yourdjs.cz/$1", "permanent": true },
     { "source": "/svatebni-dj-brno", "destination": "/svatebni-dj-brno/", "permanent": true },
     { "source": "/svatebni-dj-ostrava", "destination": "/svatebni-dj-ostrava/", "permanent": true }
   ],
