@@ -30,7 +30,7 @@ FILE 2: /svatebni-dj-brno/index.html
 
   <base href="/">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/styles.css">
 
   <style>
     .no-scrollbar::-webkit-scrollbar{display:none}
@@ -40,6 +40,9 @@ FILE 2: /svatebni-dj-brno/index.html
     img[loading="lazy"]{content-visibility:auto}
     .fluid-title{font-size:clamp(2rem,8vw,3.3rem)}
     .balance{text-wrap:balance}
+    #galleryTrack{--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem}
+    #galleryTrack .g-item{width:100%;height:100%;border-radius:1rem;overflow:hidden;background:rgba(255,255,255,.06);scroll-snap-align:start}
+    #galleryTrack .g-item img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
     .reveal.in{opacity:1;transform:translateY(0)}
     @media (max-width:640px){.reveal{transition-duration:.85s}}
@@ -167,6 +170,24 @@ FILE 2: /svatebni-dj-brno/index.html
   <!-- LOGOS (swipe carousel) -->
   <section id="logos" class="py-10">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold reveal">Ukázky atmosféry z moravských svateb</h2>
+      <p class="mt-2 text-white/70 reveal">
+        První tanec, večerní párty, multi-žánrový set pro mladé, rodiče i hosty z zahraničí.
+      </p>
+
+      <div class="relative mt-8">
+        <div class="edge-fade edge-left"></div>
+        <div class="edge-fade edge-right"></div>
+
+        <div id="galleryTrack" class="no-scrollbar">
+          <!-- můžeš použít stejné fotky jako na hlavní stránce -->
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Svatební DJ Brno – první tanec"/></div>
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Svatební DJ Brno – večerní párty"/></div>
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Světla a výzdoba"/></div>
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Moderace důležitých momentů"/></div>
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Plný parket v Brně"/></div>
+          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Rodinné tance"/></div>
+        </div>
       <h3 class="text-center text-sm font-semibold tracking-wide text-white/60">Spolupracoval jsem / hrál jsem pro</h3>
       <div class="relative mt-6 no-scrollbar" id="logoCarousel">
   <button id="logoPrev" type="button" aria-label="Předchozí loga" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
@@ -641,6 +662,12 @@ FILE 2: /svatebni-dj-brno/index.html
           });
         });
       }
+
+      // Blur-up once images loaded (gallery)
+      document.querySelectorAll('#galleryTrack img').forEach(function(img){
+        function done(){ img.classList.add('loaded'); }
+        if(img.complete){ done(); } else { img.addEventListener('load', done, { once:true }); }
+      });
     })();
   </script>
 </body>
