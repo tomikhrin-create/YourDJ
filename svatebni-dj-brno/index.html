@@ -40,6 +40,7 @@ FILE 2: /svatebni-dj-brno/index.html
     img[loading="lazy"]{content-visibility:auto}
     .fluid-title{font-size:clamp(2rem,8vw,3.3rem)}
     .balance{text-wrap:balance}
+    #galleryTrack{--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem}
     #galleryTrack .g-item{width:100%;height:100%;border-radius:1rem;overflow:hidden;background:rgba(255,255,255,.06);scroll-snap-align:start}
     #galleryTrack .g-item img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
@@ -179,8 +180,7 @@ FILE 2: /svatebni-dj-brno/index.html
         <div class="edge-fade edge-left"></div>
         <div class="edge-fade edge-right"></div>
 
-        <div id="galleryTrack" class="no-scrollbar"
-             style="--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem">
+        <div id="galleryTrack" class="no-scrollbar">
           <!-- můžeš použít stejné fotky jako na hlavní stránce -->
           <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Svatební DJ Brno – první tanec"/></div>
           <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Svatební DJ Brno – večerní párty"/></div>
