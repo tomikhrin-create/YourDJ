@@ -40,6 +40,8 @@ FILE 2: /svatebni-dj-brno/index.html
     img[loading="lazy"]{content-visibility:auto}
     .fluid-title{font-size:clamp(2rem,8vw,3.3rem)}
     .balance{text-wrap:balance}
+    #galleryTrack .g-item{width:100%;height:100%;border-radius:1rem;overflow:hidden;background:rgba(255,255,255,.06);scroll-snap-align:start}
+    #galleryTrack .g-item img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
     .reveal.in{opacity:1;transform:translateY(0)}
     @media (max-width:640px){.reveal{transition-duration:.85s}}
@@ -578,6 +580,12 @@ FILE 2: /svatebni-dj-brno/index.html
           });
         });
       }
+
+      // Blur-up once images loaded (gallery)
+      document.querySelectorAll('#galleryTrack img').forEach(function(img){
+        function done(){ img.classList.add('loaded'); }
+        if(img.complete){ done(); } else { img.addEventListener('load', done, { once:true }); }
+      });
     })();
   </script>
 </body>
