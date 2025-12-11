@@ -56,8 +56,15 @@ FILE 2: /svatebni-dj-brno/index.html
     /* Elegant letter animations */
     .letter-animate{display:inline-block;opacity:0;transform:translateY(30px);animation:letter-appear 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards}
     @keyframes letter-appear{to{opacity:1;transform:translateY(0)}}
-    .fade-in-scroll{opacity:0;transform:translateY(20px);transition:opacity 0.8s ease,transform 0.8s ease}
+    .fade-in-scroll{opacity:0;transform:translateY(30px);transition:opacity 1.2s cubic-bezier(0.16,1,0.3,1),transform 1.2s cubic-bezier(0.16,1,0.3,1)}
     .fade-in-scroll.visible{opacity:1;transform:translateY(0)}
+
+    /* Glowing effect for cards */
+    .card-glow{position:relative;transition:all 0.3s ease}
+    .card-glow::before{content:'';position:absolute;inset:-2px;background:radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),rgba(245,158,11,0.15),transparent 40%);border-radius:inherit;opacity:0;transition:opacity 0.3s ease;pointer-events:none;z-index:-1}
+    .card-glow:hover::before{opacity:1}
+    .card-glow::after{content:'';position:absolute;inset:-1px;background:radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),rgba(245,158,11,0.4),transparent 40%);border-radius:inherit;opacity:0;transition:opacity 0.3s ease;pointer-events:none;z-index:0;mix-blend-mode:screen}
+    .card-glow:hover::after{opacity:1}
   </style>
 
   <!-- LocalBusiness JSON-LD (Brno) -->
@@ -258,7 +265,7 @@ FILE 2: /svatebni-dj-brno/index.html
   <!-- GARANCE -->
   <section id="garance" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center ring-2 ring-amber-500 shadow-[0_0_24px_rgba(245,158,11,0.28),0_0_6px_rgba(245,158,11,0.18)] reveal">
+      <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center ring-2 ring-amber-500 shadow-[0_0_24px_rgba(245,158,11,0.28),0_0_6px_rgba(245,158,11,0.18)] reveal">
         <h3 class="text-2xl font-extrabold">GARANCE SPOKOJENOSTI</h3>
         <p class="mx-auto mt-3 max-w-2xl text-white/70">
           Věřím své práci. Pokud se hosté během večera nezvednou k tanci, zůstanu o hodinu déle zdarma.
@@ -279,7 +286,7 @@ FILE 2: /svatebni-dj-brno/index.html
         Cena je vždy na vyžádání – podle místa (Brno, okolní vinařství), délky hraní a techniky.
       </p>
       <div class="mt-8 grid gap-6 lg:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
+        <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
           <div class="flex items-baseline justify-between">
             <h3 class="text-xl font-bold">Classic Brno</h3>
             <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
@@ -295,7 +302,7 @@ FILE 2: /svatebni-dj-brno/index.html
           </a>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 ring-2 ring-amber-500 reveal">
+        <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 ring-2 ring-amber-500 reveal">
           <div class="flex items-baseline justify-between">
             <div class="flex items-center gap-2">
               <h3 class="text-xl font-bold">Premium Brno</h3>
@@ -318,7 +325,7 @@ FILE 2: /svatebni-dj-brno/index.html
           </a>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
+        <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
           <div class="flex items-baseline justify-between">
             <h3 class="text-xl font-bold">Deluxe Morava</h3>
             <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
@@ -347,7 +354,7 @@ FILE 2: /svatebni-dj-brno/index.html
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold reveal">Co říkají páry z Brna a jižní Moravy</h2>
       <div class="mt-6 grid gap-6 md:grid-cols-3">
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
+        <figure class="card-glow rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/1.webp" alt="Recenze 1" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Veronika & Petr (Brno)</figcaption>
@@ -356,7 +363,7 @@ FILE 2: /svatebni-dj-brno/index.html
             Parket byl plný celý večer. Skvělý výběr hudby pro všechny věkové skupiny a profesionální moderace.
           </blockquote>
         </figure>
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
+        <figure class="card-glow rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/2.webp" alt="Recenze 2" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Tereza & Pavel (vinařství)</figcaption>
@@ -365,7 +372,7 @@ FILE 2: /svatebni-dj-brno/index.html
             Playlist na míru, super domluva a atmosféra od prvního tance až do rána. Hosté nás chválí doteď.
           </blockquote>
         </figure>
-        <figure class="rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
+        <figure class="card-glow rounded-2xl border border-white/10 bg-white/5 p-6 reveal">
           <div class="flex items-center gap-3">
             <img loading="lazy" src="/assets/avatars/3.webp" alt="Recenze 3" class="h-10 w-10 rounded-full object-cover"/>
             <figcaption class="font-semibold">Lucie & Honza (okolí Brna)</figcaption>
@@ -395,7 +402,7 @@ FILE 2: /svatebni-dj-brno/index.html
           <li class="flex gap-2"><span class="text-amber-400">✓</span>Moderace od obřadu až po večerní párty</li>
         </ul>
       </div>
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
+      <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
         <h3 class="text-xl font-bold">Bonusy k rezervaci termínu</h3>
         <ul class="mt-4 space-y-2 text-white/80">
           <li class="flex gap-2"><span class="text-amber-400">✓</span>1 hodina konzultace zdarma – plán hudby a harmonogramu</li>
@@ -412,7 +419,7 @@ FILE 2: /svatebni-dj-brno/index.html
   <!-- KONTAKT -->
   <section id="kontakt" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
+      <div class="card-glow rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-sm p-6 reveal">
         <div class="grid gap-6 lg:grid-cols-2">
           <div>
             <h2 class="text-3xl font-bold">Poptávka termínu – Svatební DJ Brno</h2>
@@ -675,28 +682,7 @@ FILE 2: /svatebni-dj-brno/index.html
         if(img.complete){ done(); } else { img.addEventListener('load', done, { once:true }); }
       });
 
-      // Elegant Letter Animations
-      function animateLetters(element){
-        if(!element || !element.textContent) return;
-        var text = element.textContent.trim();
-        element.textContent = '';
-
-        text.split('').forEach(function(char, index){
-          var span = document.createElement('span');
-          span.className = 'letter-animate';
-          span.textContent = char === ' ' ? '\u00A0' : char; // preserve spaces
-          span.style.animationDelay = (index * 0.05) + 's'; // stagger by 50ms
-          element.appendChild(span);
-        });
-      }
-
-      // Animate main hero heading on load
-      var heroTitle = document.querySelector('#top h1 span');
-      if(heroTitle){
-        animateLetters(heroTitle);
-      }
-
-      // Scroll-triggered animations for section headings
+      // Scroll-triggered animations for section headings (professional timing)
       var scrollIO = new IntersectionObserver(function(entries){
         entries.forEach(function(e){
           if(e.isIntersecting){
@@ -704,12 +690,23 @@ FILE 2: /svatebni-dj-brno/index.html
             scrollIO.unobserve(e.target);
           }
         });
-      }, { rootMargin: '-15% 0px', threshold: 0.1 });
+      }, { rootMargin: '-10% 0px', threshold: 0.15 });
 
       // Apply fade-in-scroll to section headings
       document.querySelectorAll('#ukazky h2, #garance h3, #balicky h2, #recenze h2, #kontakt h2, #faq h2').forEach(function(heading){
         heading.classList.add('fade-in-scroll');
         scrollIO.observe(heading);
+      });
+
+      // Glowing effect on cards
+      document.querySelectorAll('.card-glow').forEach(function(card){
+        card.addEventListener('mousemove', function(e){
+          var rect = card.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', x + 'px');
+          card.style.setProperty('--mouse-y', y + 'px');
+        });
       });
     })();
   </script>
