@@ -165,37 +165,54 @@ FILE 2: /svatebni-dj-brno/index.html
     </div>
   </section>
 
-  <!-- UKÁZKY ATMOSFÉRY -->
+ <!-- SHOWCASE (fade/slide images) -->
   <section id="ukazky" class="bg-black py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold reveal">Ukázky atmosféry z moravských svateb</h2>
-      <p class="mt-2 text-white/70 reveal">
-        První tanec, večerní párty, multi-žánrový set pro mladé, rodiče i hosty z zahraničí.
-      </p>
+  <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold reveal">Ukázky atmosféry z moravských svateb</h2>
+    <p class="mt-2 text-white/70 reveal">První tanec, večerní párty, multi‑žánrový set pro mladé i rodiče.</p>
 
-      <div class="relative mt-8">
-        <div class="edge-fade edge-left"></div>
-        <div class="edge-fade edge-right"></div>
+    <div class="relative mt-8" id="galleryCarousel">
+      <button id="galleryPrev" type="button" aria-label="Předchozí foto" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
+        <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="edge-fade edge-left"></div>
+      <div class="edge-fade edge-right"></div>
 
-        <div id="galleryTrack" class="no-scrollbar"
-             style="--rowH:clamp(120px,24vw,260px);display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,var(--rowH));grid-auto-columns:calc(var(--rowH)*4/3);gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.25rem">
-          <!-- můžeš použít stejné fotky jako na hlavní stránce -->
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Svatební DJ Brno – první tanec"/></div>
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Svatební DJ Brno – večerní párty"/></div>
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Světla a výzdoba"/></div>
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Moderace důležitých momentů"/></div>
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Plný parket v Brně"/></div>
-          <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Rodinné tance"/></div>
-        </div>
+      <!-- Two rows visible; more photos scroll horizontally -->
+      <div id="galleryTrack" class="no-scrollbar">
+        <!-- 1..18 items -->
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/1.webp" onerror="this.onerror=null;this.src='/assets/gallery/1.jpg'" alt="Ukázka atmosféry 1"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/2.webp" onerror="this.onerror=null;this.src='/assets/gallery/2.jpg'" alt="Ukázka atmosféry 2"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/3.webp" onerror="this.onerror=null;this.src='/assets/gallery/3.jpg'" alt="Ukázka atmosféry 3"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/4.webp" onerror="this.onerror=null;this.src='/assets/gallery/4.jpg'" alt="Ukázka atmosféry 4"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/5.webp" onerror="this.onerror=null;this.src='/assets/gallery/5.jpg'" alt="Ukázka atmosféry 5"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/6.webp" onerror="this.onerror=null;this.src='/assets/gallery/6.jpg'" alt="Ukázka atmosféry 6"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/7.webp" onerror="this.onerror=null;this.src='/assets/gallery/7.jpg'" alt="Ukázka atmosféry 7"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/8.webp" onerror="this.onerror=null;this.src='/assets/gallery/8.jpg'" alt="Ukázka atmosféry 8"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/9.webp" onerror="this.onerror=null;this.src='/assets/gallery/9.jpg'" alt="Ukázka atmosféry 9"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/10.webp" onerror="this.onerror=null;this.src='/assets/gallery/10.jpg'" alt="Ukázka atmosféry 10"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/11.webp" onerror="this.onerror=null;this.src='/assets/gallery/11.jpg'" alt="Ukázka atmosféry 11"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/12.webp" onerror="this.onerror=null;this.src='/assets/gallery/12.jpg'" alt="Ukázka atmosféry 12"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/13.webp" onerror="this.onerror=null;this.src='/assets/gallery/13.jpg'" alt="Ukázka atmosféry 13"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/14.webp" onerror="this.onerror=null;this.src='/assets/gallery/14.jpg'" alt="Ukázka atmosféry 14"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/15.webp" onerror="this.onerror=null;this.src='/assets/gallery/15.jpg'" alt="Ukázka atmosféry 15"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/16.webp" onerror="this.onerror=null;this.src='/assets/gallery/16.jpg'" alt="Ukázka atmosféry 16"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/17.webp" onerror="this.onerror=null;this.src='/assets/gallery/17.jpg'" alt="Ukázka atmosféry 17"/></div>
+        <div class="g-item"><img class="blur-up" loading="lazy" decoding="async" src="/assets/gallery/18.webp" onerror="this.onerror=null;this.src='/assets/gallery/18.jpg'" alt="Ukázka atmosféry 18"/></div>
       </div>
+
+      <button id="galleryNext" type="button" aria-label="Další foto" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-600 text-black shadow-md hover:shadow-lg focus:outline-none disabled:opacity-40">
+        <svg viewBox="0 0 24 24" class="mx-auto h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- GARANCE -->
   <section id="garance" class="py-14 sm:py-20">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center ring-2 ring-amber-500 shadow-[0_0_24px_rgba(245,158,11,0.28),0_0_6px_rgba(245,158,11,0.18)] reveal">
-        <h3 class="text-2xl font-extrabold">Garance plného parketu v Brně</h3>
+        <h3 class="text-2xl font-extrabold">GARANCE SPOKOJENOSTI</h3>
         <p class="mx-auto mt-3 max-w-2xl text-white/70">
           Věřím své práci. Pokud se hosté během večera nezvednou k tanci, zůstanu o hodinu déle zdarma.
           Předem spolu nastavíme styl večera – tak, aby si ho užili mladí, rodiče i prarodiče.
@@ -240,10 +257,14 @@ FILE 2: /svatebni-dj-brno/index.html
             <span class="text-lg font-semibold text-amber-400">Cena na vyžádání</span>
           </div>
           <ul class="mt-5 space-y-2 text-white/80">
-            <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 12 hodin</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Koordinace programu s restaurací / vinařstvím</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Mlha (efekt) a rozšířená světelná show</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Moderace klíčových momentů během dne</li>
+                <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set do 12 hodin</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Koordinace dle Vašeho programu</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Mlha (efekt)</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Rozšířená světelná show</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Moderace klíčových momentů</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Ozvučení Obřadu</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Inspirace pro Vaší svatbu v PDF (Zábava</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Inspirace z jiných svateb Playlisty</li>
           </ul>
           <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover focus:ring-yellow-300">
             Chci nabídku pro Brno
@@ -257,9 +278,14 @@ FILE 2: /svatebni-dj-brno/index.html
           </div>
           <ul class="mt-5 space-y-2 text-white/80">
             <li class="flex gap-2"><span class="text-amber-400">•</span>DJ set dle domluvy (nad 12 h)</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Komplexní koordinace + celodenní moderace</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Plná světelná show + speciální efekty</li>
-            <li class="flex gap-2"><span class="text-amber-400">•</span>Rezervní technika a support</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Komplexní koordinace + celovečerní moderace</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Ozvučení obřadu + dalších prostor</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Připrava vlastní zábavy pro svatebčany i děti</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Full light show + speciální efekty</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Rezervní technika a technická podpora</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>After‑party mix pro vás</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Inspirace pro Vaší svatbu v PDF (Zábava)</li>
+            <li class="flex gap-2"><span class="text-amber-400">•</span>Inspirace z jiných svateb Playlisty </li>
           </ul>
           <a href="#kontakt" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 mt-6 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-black glow-hover focus:ring-yellow-300">
             Chci deluxe řešení
